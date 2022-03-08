@@ -13,6 +13,3 @@ def openTopLevel(self):
             self.toplevel = Toplevel()
             InitializeTopLevelTkWindow(self.toplevel)
             self.toplevel.mainloop()
-
-def closeTopLevel(self):
-    self.master.destroy()

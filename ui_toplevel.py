@@ -1,6 +1,7 @@
 #Import all the necessary libraries
+from matplotlib import scale
 import customtkinter
-from tkinter import Label, Frame, CENTER, LEFT, RIGHT
+from tkinter import Label, Frame, CENTER, LEFT, RIGHT, DISABLED, Scale
 from config import *
 import math
 from ui_functions import UiFunc
@@ -25,6 +26,8 @@ class InitializeTopLevelTkWindow:
         InitializeTopLevelTkWindow.loadBottomBar(self, master)
 
         UiFunc.CheckboxStartup(self)
+
+        UiFunc.resizeSlider(self)
 
     def loadTopBar(self, master):
         self.top_frame = Frame(master, 
@@ -55,7 +58,7 @@ class InitializeTopLevelTkWindow:
                                                    bg_color=BACKGROUND_COLOR_BORDERS,
                                                    fg_color=BUTTON_COLOR_BORDERS,
                                                    hover_color=BUTTON_HOVER_COLOR_BORDERS,
-                                                   command=lambda: InitializeTopLevelTkWindow.closeTopLevel(self))
+                                                   command=lambda: UiFunc.closeTopLevel(self))
         self.button_back.place(x=722, y=20, anchor=CENTER)
 
 
@@ -95,15 +98,15 @@ class InitializeTopLevelTkWindow:
                                       width=16, 
                                       font=(TEXT_FONT, TITLE_FONTSIZE)) 
         self.slider_container_1_name.place(x=0 + 145, y=6) 
-        self.container_title_kcal_ref_coords = self.slider_container_1_name.place_info()
+        self.container_title_container_1_ref_coords = self.slider_container_1_name.place_info()
 
         customtkinter.CTkFrame(master=self.container_sliders,
                                width=self.slider_container_1_name.winfo_reqwidth(),
                                height=2,
                                corner_radius=10,
-                               fg_color=MATERIALS_LIGHT_BORDER).place(x=int(self.container_title_kcal_ref_coords.get("x")), y=int(self.container_title_kcal_ref_coords.get("y")) + 28)
+                               fg_color=MATERIALS_LIGHT_BORDER).place(x=int(self.container_title_container_1_ref_coords.get("x")), y=int(self.container_title_container_1_ref_coords.get("y")) + 28)
 
-        self.slider_kcal = customtkinter.CTkSlider(master=self.container_sliders,
+        self.slider_container_1 = customtkinter.CTkSlider(master=self.container_sliders,
                                                    width=200,
                                                    height=25,
                                                    border_width=5,
@@ -112,26 +115,26 @@ class InitializeTopLevelTkWindow:
                                                    number_of_steps=100,
                                                    bg_color="white",
                                                    progress_color = CONTAINER_SHADOW_COLOR,
-                                                   command = self.refreshKcalSlider) # no need for arg to  work
-        self.slider_kcal.place(x=int(self.container_title_kcal_ref_coords.get("x")) - 9, y=int(self.container_title_kcal_ref_coords.get("y")) + 40)
+                                                   command = self.refreshContainer1Slider) # no need for arg to  work
+        self.slider_container_1.place(x=int(self.container_title_container_1_ref_coords.get("x")) - 9, y=int(self.container_title_container_1_ref_coords.get("y")) + 40)
 
-        self.slider_kcal_max = Label(self.container_sliders, 
+        self.slider_container_1_max = Label(self.container_sliders, 
                                       text="0%",
                                       bg="white", 
                                       width=4, 
                                       justify=RIGHT,
                                       anchor="e",
                                       font=(TEXT_FONT, 8)) 
-        self.slider_kcal_max.place(x=int(self.container_title_kcal_ref_coords.get("x")) - 39, y=int(self.container_title_kcal_ref_coords.get("y")) + 43) 
+        self.slider_container_1_max.place(x=int(self.container_title_container_1_ref_coords.get("x")) - 39, y=int(self.container_title_container_1_ref_coords.get("y")) + 43) 
 
-        self.slider_kcal_min = Label(self.container_sliders, 
+        self.slider_container_1_min = Label(self.container_sliders, 
                                       text="100%",
                                       bg="white", 
                                       width=5, 
                                       justify=LEFT,
                                       anchor="w",
                                       font=(TEXT_FONT, 8)) 
-        self.slider_kcal_min.place(x=int(self.container_title_kcal_ref_coords.get("x")) + 191, y=int(self.container_title_kcal_ref_coords.get("y")) + 43) 
+        self.slider_container_1_min.place(x=int(self.container_title_container_1_ref_coords.get("x")) + 191, y=int(self.container_title_container_1_ref_coords.get("y")) + 43) 
         #endregion container 1
 
         customtkinter.CTkFrame(master=self.container_sliders,
@@ -153,22 +156,22 @@ class InitializeTopLevelTkWindow:
         self.container_2_checkbox.place(x=25, y=25 + 82)
         self.container_2_checkbox.configure(command = lambda: UiFunc.switchCheckboxState(self.container_2_checkbox, 2))    
 
-        self.slider_fat_name = Label(self.container_sliders, 
+        self.slider_container_2_name = Label(self.container_sliders, 
                                       text=config.get("c2", "name"),
                                       bg="white", 
                                       width=16, 
                                       font=(TEXT_FONT, TITLE_FONTSIZE)) 
-        self.slider_fat_name.place(x=0 + 145, y=90) 
-        self.container_title_fat_ref_coords = self.slider_fat_name.place_info()
+        self.slider_container_2_name.place(x=0 + 145, y=90) 
+        self.container_title_container_2_ref_coords = self.slider_container_2_name.place_info()
 
         customtkinter.CTkFrame(master=self.container_sliders,
-                               width=self.slider_fat_name.winfo_reqwidth(),
+                               width=self.slider_container_2_name.winfo_reqwidth(),
                                height=2,
                                corner_radius=10,
-                               fg_color=MATERIALS_LIGHT_BORDER).place(x=int(self.container_title_fat_ref_coords.get("x")), y=int(self.container_title_fat_ref_coords.get("y")) + 28)
+                               fg_color=MATERIALS_LIGHT_BORDER).place(x=int(self.container_title_container_2_ref_coords.get("x")), y=int(self.container_title_container_2_ref_coords.get("y")) + 28)
 
 
-        self.slider_fat = customtkinter.CTkSlider(master=self.container_sliders,
+        self.slider_container_2 = customtkinter.CTkSlider(master=self.container_sliders,
                                                    width=200,
                                                    height=25,
                                                    border_width=5,
@@ -177,26 +180,26 @@ class InitializeTopLevelTkWindow:
                                                    number_of_steps=100,
                                                    bg_color="white",
                                                    progress_color = CONTAINER_SHADOW_COLOR,
-                                                   command = self.refreshFatSlider) # no need for arg to  work
-        self.slider_fat.place(x=int(self.container_title_fat_ref_coords.get("x")) - 9, y=int(self.container_title_fat_ref_coords.get("y")) + 40)
+                                                   command = self.refreshContainer2Slider) # no need for arg to  work
+        self.slider_container_2.place(x=int(self.container_title_container_2_ref_coords.get("x")) - 9, y=int(self.container_title_container_2_ref_coords.get("y")) + 40)
 
-        self.slider_fat_max = Label(self.container_sliders, 
+        self.slider_container_2_max = Label(self.container_sliders, 
                                       text="0%",
                                       bg="white", 
                                       width=4, 
                                       justify=RIGHT,
                                       anchor="e",
                                       font=(TEXT_FONT, 8)) 
-        self.slider_fat_max.place(x=int(self.container_title_fat_ref_coords.get("x")) - 39, y=int(self.container_title_fat_ref_coords.get("y")) + 43) 
+        self.slider_container_2_max.place(x=int(self.container_title_container_2_ref_coords.get("x")) - 39, y=int(self.container_title_container_2_ref_coords.get("y")) + 43) 
 
-        self.slider_fat_min = Label(self.container_sliders, 
+        self.slider_container_2_min = Label(self.container_sliders, 
                                       text="100%",
                                       bg="white", 
                                       width=5, 
                                       justify=LEFT,
                                       anchor="w",
                                       font=(TEXT_FONT, 8)) 
-        self.slider_fat_min.place(x=int(self.container_title_fat_ref_coords.get("x")) + 191, y=int(self.container_title_fat_ref_coords.get("y")) + 43) 
+        self.slider_container_2_min.place(x=int(self.container_title_container_2_ref_coords.get("x")) + 191, y=int(self.container_title_container_2_ref_coords.get("y")) + 43) 
         #endregion container 2
 
 
@@ -220,21 +223,21 @@ class InitializeTopLevelTkWindow:
         self.container_3_checkbox.place(x=25, y=25 + 166)
         self.container_3_checkbox.configure(command = lambda: UiFunc.switchCheckboxState(self.container_3_checkbox, 3))    
 
-        self.slider_sugar_name = Label(self.container_sliders, 
+        self.slider_container_3_name = Label(self.container_sliders, 
                                       text=config.get("c3", "name"),
                                       bg="white", 
                                       width=16, 
                                       font=(TEXT_FONT, TITLE_FONTSIZE)) 
-        self.slider_sugar_name.place(x=0 + 145, y=174) 
-        self.container_title_sugar_ref_coords = self.slider_sugar_name.place_info()
+        self.slider_container_3_name.place(x=0 + 145, y=174) 
+        self.container_title_container_3_ref_coords = self.slider_container_3_name.place_info()
 
         customtkinter.CTkFrame(master=self.container_sliders,
-                               width=self.slider_sugar_name.winfo_reqwidth(),
+                               width=self.slider_container_3_name.winfo_reqwidth(),
                                height=2,
                                corner_radius=10,
-                               fg_color=MATERIALS_LIGHT_BORDER).place(x=int(self.container_title_sugar_ref_coords.get("x")), y=int(self.container_title_sugar_ref_coords.get("y")) + 28)
+                               fg_color=MATERIALS_LIGHT_BORDER).place(x=int(self.container_title_container_3_ref_coords.get("x")), y=int(self.container_title_container_3_ref_coords.get("y")) + 28)
 
-        self.slider_sugar = customtkinter.CTkSlider(master=self.container_sliders,
+        self.slider_container_3 = customtkinter.CTkSlider(master=self.container_sliders,
                                                    width=200,
                                                    height=25,
                                                    border_width=5,
@@ -243,31 +246,39 @@ class InitializeTopLevelTkWindow:
                                                    number_of_steps=100,
                                                    bg_color="white",
                                                    progress_color = CONTAINER_SHADOW_COLOR,
-                                                   command = self.refreshSugarSlider) # no need for arg to  work
-        self.slider_sugar.place(x=int(self.container_title_sugar_ref_coords.get("x")) - 9, y=int(self.container_title_sugar_ref_coords.get("y")) + 40)
+                                                   command = self.refreshContainer3Slider) # no need for arg to  work
+        self.slider_container_3.place(x=int(self.container_title_container_3_ref_coords.get("x")) - 9, y=int(self.container_title_container_3_ref_coords.get("y")) + 40)
 
-        self.slider_sugar_max = Label(self.container_sliders, 
+        self.slider_container_3_max = Label(self.container_sliders, 
                                       text="0%",
                                       bg="white", 
                                       width=4, 
                                       justify=RIGHT,
                                       anchor="e",
                                       font=(TEXT_FONT, 8)) 
-        self.slider_sugar_max.place(x=int(self.container_title_sugar_ref_coords.get("x")) - 39, y=int(self.container_title_sugar_ref_coords.get("y")) + 43) 
+        self.slider_container_3_max.place(x=int(self.container_title_container_3_ref_coords.get("x")) - 39, y=int(self.container_title_container_3_ref_coords.get("y")) + 43) 
 
-        self.slider_sugar_min = Label(self.container_sliders, 
+        self.slider_container_3_min = Label(self.container_sliders, 
                                       text="100%",
                                       bg="white", 
                                       width=5, 
                                       justify=LEFT,
                                       anchor="w",
                                       font=(TEXT_FONT, 8)) 
-        self.slider_sugar_min.place(x=int(self.container_title_sugar_ref_coords.get("x")) + 191, y=int(self.container_title_sugar_ref_coords.get("y")) + 43) 
+        self.slider_container_3_min.place(x=int(self.container_title_container_3_ref_coords.get("x")) + 191, y=int(self.container_title_container_3_ref_coords.get("y")) + 43) 
         #endregion container 3
 
 
         
+    def refreshContainer1Slider(self, value):
+        UiFunc.calculateSliderValues(self)
 
+    def refreshContainer2Slider(self, value):
+        UiFunc.calculateSliderValues(self)
+
+    def refreshContainer3Slider(self, value):
+        UiFunc.calculateSliderValues(self)
+        
         # config = UiFunc.readConfigFile()
         # config.get("c1", "name")
 
@@ -289,48 +300,3 @@ class InitializeTopLevelTkWindow:
                                height=height + 1,
                                corner_radius = 3,
                                fg_color = color).place(x=posx - 2, y=posy - 2)   
-
-
-    def calculateSliderValues(self):
-        config = UiFunc.readConfigFile()
-        main_supply = int(config.get("portionsettings", "main_supply_container"))
-        if main_supply == 1: # container 1
-            kcal = int(config.get("c1", "kcal"))
-            fat = int(config.get("c1", "fat"))
-            sugar = int(config.get("c1", "sugar"))
-
-        elif main_supply == 2: # container 2
-            kcal = int(config.get("c2", "kcal"))
-            fat = int(config.get("c2", "fat"))
-            sugar = int(config.get("c2", "sugar"))
-
-        refill_kcal = int(config.get("c3", "kcal")) # container 3
-        refill_fat = int(config.get("c3", "fat"))
-        refill_sugar = int(config.get("c3", "sugar"))
-
-
-        slider_kcal = self.slider_kcal.value
-        slider_fat = self.slider_fat.value
-        slider_sugar = self.slider_sugar.value
-        # define min and max at beginning of toplevel load !!!!!!!!!!!!!!!!!!!
-        result_kcal = round((slider_kcal * kcal) + (refill_kcal * (1 - slider_kcal)), 1)
-        result_fat = round((slider_fat * fat) + (refill_fat * (1 - slider_fat)), 1)
-        result_sugar = round((slider_sugar * sugar) + (refill_sugar * (1 - slider_sugar)), 1)
-
-        self.slider_container_1_name.configure(text= str(result_kcal) + " Kcal auf 100g")
-        self.slider_fat_name.configure(text= str(result_fat) + " Fett auf 100g")
-        self.slider_sugar_name.configure(text= str(result_sugar) + " Zucker auf 100g")
-        #0,2 * 25 + 5 * (1- 0,2)
-
-    def refreshKcalSlider(self, value):
-        InitializeTopLevelTkWindow.calculateSliderValues(self)
-
-    def refreshFatSlider(self, value):
-        InitializeTopLevelTkWindow.calculateSliderValues(self)
-
-    def refreshSugarSlider(self, value):
-        InitializeTopLevelTkWindow.calculateSliderValues(self)
-
-    def closeTopLevel(self):
-        #UiFunc.CheckboxStartup(self) ##################### DAS HIER SOLLTE NICHT UI TOPLEVEL AKTUALISIEREN SONDER UI MAIN
-        self.master.destroy()

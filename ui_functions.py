@@ -1,4 +1,5 @@
 import configparser
+from multiprocessing.dummy import active_children
 
 from numpy import true_divide
 from config import BACKGROUND_COLOR_BUTTON, BACKGROUND_LIGHT_COLOR_BUTTON, CONFIG_PATH
@@ -6,16 +7,11 @@ from datetime import datetime
 import time
 import threading
 import sys
-import math
 
 #from ui import new
 class UiFunc:
-    #region TOPLEVEL
-
-
-    #endregion TOPLEVEL
-
-
+    '''All User Interface functions'''
+    
     def portionButtonSwitch(self, instance, count):
         '''setup portion size with switches'''
         if self.button_portion_1.fg_color == BACKGROUND_COLOR_BUTTON:
@@ -126,35 +122,87 @@ class UiFunc:
                 exec('self.container_' + str(i) + '_checkbox.configure(fg_color="white")')
 
 
+    def resizeSlider(self):
+        if config.get("c1", "supply_active") == str(False):
+            self.slider_container_1.value = 0
+            config.set("portionsettings", "c1_percentage", str(self.slider_container_1.value))
+
+        if config.get("c2", "supply_active") == str(False):
+            self.slider_container_2.value = 0
+            config.set("portionsettings", "c2_percentage", str(self.slider_container_2.value))
+            
+        if config.get("c3", "supply_active") == str(False):
+            self.slider_container_3.value = 0
+            config.set("portionsettings", "c3_percentage", str(self.slider_container_3.value))
+
+
+    #region TOPLEVEL
+    def calculateSliderValues(self):
+        config = UiFunc.readConfigFile()
+        activated_supply = []
+        for i in range(1, 4):
+            activated_supply.append(config.get("c"+ str(i), "supply_active"))
+        print(activated_supply)
+
+        if activated_supply[0] == str(True):
+            con_1_value = self.slider_container_1.value
+            config.set("portionsettings", "c1_percentage", str(con_1_value))
+            print(con_1_value)
+        else:
+            con_1_value = 0
+        
+        if activated_supply[1] == str(True):
+            con_2_value = self.slider_container_2.value
+            config.set("portionsettings", "c2_percentage", str(con_2_value))
+            print(con_2_value)
+        else:
+            con_1_value = 0
+
+        if activated_supply[2] == str(True):
+            con_3_value = self.slider_container_3.value
+            config.set("portionsettings", "c3_percentage", str(con_3_value))
+            print(con_3_value)
+        else:
+            con_3_value = 0
+
+
+        # main_supply = int(config.get("portionsettings", "main_supply_container"))
+        # if main_supply == 1: # container 1
+        #     kcal = int(config.get("c1", "kcal"))
+        #     fat = int(config.get("c1", "fat"))
+        #     sugar = int(config.get("c1", "sugar"))
+
+        # elif main_supply == 2: # container 2
+        #     kcal = int(config.get("c2", "kcal"))
+        #     fat = int(config.get("c2", "fat"))
+        #     sugar = int(config.get("c2", "sugar"))
+
+        # refill_kcal = int(config.get("c3", "kcal")) # container 3
+        # refill_fat = int(config.get("c3", "fat"))
+        # refill_sugar = int(config.get("c3", "sugar"))
+
+
+        # slider_kcal = self.slider_kcal.value
+        # slider_fat = self.slider_fat.value
+        # slider_sugar = self.slider_sugar.value
+        # # define min and max at beginning of toplevel load !!!!!!!!!!!!!!!!!!!
+        # result_kcal = round((slider_kcal * kcal) + (refill_kcal * (1 - slider_kcal)), 1)
+        # result_fat = round((slider_fat * fat) + (refill_fat * (1 - slider_fat)), 1)
+        # result_sugar = round((slider_sugar * sugar) + (refill_sugar * (1 - slider_sugar)), 1)
+
+        # self.slider_container_1_name.configure(text= str(result_kcal) + " Kcal auf 100g")
+        # self.slider_fat_name.configure(text= str(result_fat) + " Fett auf 100g")
+        # self.slider_sugar_name.configure(text= str(result_sugar) + " Zucker auf 100g")
+
+        #0,2 * 25 + 5 * (1- 0,2)
+
+
+
+    def closeTopLevel(self):
+        #UiFunc.CheckboxStartup(self)
+        self.master.destroy()
+        
+    #endregion TOPLEVEL
+
 
 config = UiFunc.readConfigFile()        
-    # TOPLEVEL
-    
-    # def calculateSliderValues(self):
-        
-    #     self.slider_kcal.value
-
-
-    #     self.slider_fat.value
-
-    #     self.slider_sugar.value
-    #     pass
-
-    # def refreshKcalSlider(self, value):
-    #     slider_value = math.trunc(self.slider_kcal.value * 100)
-    #     UiFunc.calculateSliderValues()
-    #     self.slider_kcal_name.configure(text= str(slider_value) + " Kcal auf 100g")
-
-
-
-
-    # def refreshFatSlider(self, value):
-
-    #     slider_value = math.trunc(self.slider_fat.value * 100)
-
-    #     self.slider_fat_name.configure(text= str(slider_value) + " Fett auf 100g")
-
-    # def refreshSugarSlider(self, value):
-    #     slider_value = math.trunc(self.slider_sugar.value * 100)
-
-    #     self.slider_sugar_name.configure(text= str(slider_value) + " Zucker auf 100g")
