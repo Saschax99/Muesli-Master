@@ -1,7 +1,6 @@
 #Import all the necessary libraries
-from matplotlib import scale
 import customtkinter
-from tkinter import Label, Frame, CENTER, LEFT, RIGHT, DISABLED, Scale
+from tkinter import Label, Frame, CENTER, LEFT, RIGHT
 from config import *
 import math
 from ui_functions import UiFunc
