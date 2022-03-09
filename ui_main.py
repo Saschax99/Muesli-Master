@@ -1,7 +1,7 @@
 #Import all the necessary libraries
 from turtle import width
 import customtkinter
-from tkinter import BooleanVar, Label, Frame, CENTER, LEFT, RIGHT, TOP, BOTTOM
+from tkinter import BooleanVar, Label, Frame, CENTER, LEFT, RIGHT, TOP, BOTTOM # why no work
 from PIL import Image, ImageTk
 from config import *
 from ui_functions import UiFunc
