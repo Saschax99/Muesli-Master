@@ -110,8 +110,8 @@ class InitializeTopLevelTkWindow:
                                                    height=25,
                                                    border_width=5,
                                                    from_=0,
-                                                   to=100,
-                                                   number_of_steps=100,
+                                                   to=90,
+                                                   number_of_steps=3,
                                                    bg_color="white",
                                                    progress_color = CONTAINER_SHADOW_COLOR,
                                                    command = self.refreshContainer1Slider) # no need for arg to  work
@@ -175,8 +175,8 @@ class InitializeTopLevelTkWindow:
                                                    height=25,
                                                    border_width=5,
                                                    from_=0,
-                                                   to=100,
-                                                   number_of_steps=100,
+                                                   to=90,
+                                                   number_of_steps=3,
                                                    bg_color="white",
                                                    progress_color = CONTAINER_SHADOW_COLOR,
                                                    command = self.refreshContainer2Slider) # no need for arg to  work
@@ -241,8 +241,8 @@ class InitializeTopLevelTkWindow:
                                                    height=25,
                                                    border_width=5,
                                                    from_=0,
-                                                   to=100,
-                                                   number_of_steps=100,
+                                                   to=90,
+                                                   number_of_steps=3,
                                                    bg_color="white",
                                                    progress_color = CONTAINER_SHADOW_COLOR,
                                                    command = self.refreshContainer3Slider) # no need for arg to  work
@@ -265,18 +265,71 @@ class InitializeTopLevelTkWindow:
                                       anchor="w",
                                       font=(TEXT_FONT, 8)) 
         self.slider_container_3_min.place(x=int(self.container_title_container_3_ref_coords.get("x")) + 191, y=int(self.container_title_container_3_ref_coords.get("y")) + 43) 
+        
+        customtkinter.CTkFrame(master=self.container_sliders,
+                               width=self.container_sliders.winfo_reqwidth(),
+                               height=2,
+                               corner_radius=10,
+                               fg_color=MATERIALS_STANDARD_BORDER).place(x=0, y=250)
+
+        customtkinter.CTkFrame(master=self.container_sliders,
+                               width=self.container_sliders.winfo_reqwidth(),
+                               height=2,
+                               corner_radius=10,
+                               fg_color=MATERIALS_LIGHT_BORDER).place(x=0, y=295)
+
+        self.calculated_name = Label(self.container_sliders, 
+                                      text="Eingestellte Nährwerte auf 100g",
+                                      bg="white", 
+                                      width=45, 
+                                      font=(TEXT_FONT, TITLE_FONTSIZE)) 
+        self.calculated_name.place(x=0, y=259) 
+
+
+        self.calculated_kcal = Label(self.container_sliders, 
+                                      text="XXX kcal",
+                                      bg="white", 
+                                      width=14, 
+                                      font=(TEXT_FONT, TITLE_FONTSIZE)) 
+        self.calculated_kcal.place(x=0, y=300) 
+        
+        customtkinter.CTkFrame(master=self.container_sliders,
+                               width=2,
+                               height=50,
+                               corner_radius=10,
+                               fg_color=MATERIALS_LIGHT_BORDER).place(x=160, y=297)
+
+        self.calculated_fat = Label(self.container_sliders, 
+                                      text="XX Fett",
+                                      bg="white", 
+                                      width=14, 
+                                      font=(TEXT_FONT, TITLE_FONTSIZE)) 
+        self.calculated_fat.place(x=162, y=300) 
+
+        customtkinter.CTkFrame(master=self.container_sliders,
+                               width=2,
+                               height=50,
+                               corner_radius=10,
+                               fg_color=MATERIALS_LIGHT_BORDER).place(x=320, y=297)     
+
+        self.calculated_sugar = Label(self.container_sliders, 
+                                      text="XX Zucker",
+                                      bg="white", 
+                                      width=14, 
+                                      font=(TEXT_FONT, TITLE_FONTSIZE)) 
+        self.calculated_sugar.place(x=322, y=300) 
         #endregion container 3
 
 
         
     def refreshContainer1Slider(self, value):
-        UiFunc.calculateSliderValues(self)
+        UiFunc.calculateSliderValues(self, 1)
 
     def refreshContainer2Slider(self, value):
-        UiFunc.calculateSliderValues(self)
+        UiFunc.calculateSliderValues(self, 2)
 
     def refreshContainer3Slider(self, value):
-        UiFunc.calculateSliderValues(self)
+        UiFunc.calculateSliderValues(self, 3)
         
         # config = UiFunc.readConfigFile()
         # config.get("c1", "name")

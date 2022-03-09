@@ -62,7 +62,7 @@ class CTkSlider(tkinter.Frame):
         self.width = width
         self.height = self.calc_optimal_height(height)
         self.border_width = round(border_width)
-        self.value = 0.5  # initial value of slider in percent
+        self.value = 0.0  # initial value of slider in percent
         self.hover_state = False
         self.from_ = from_
         self.to = to

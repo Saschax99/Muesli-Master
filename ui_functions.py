@@ -137,7 +137,12 @@ class UiFunc:
 
 
     #region TOPLEVEL
-    def calculateSliderValues(self):
+    def calculateSliderValues(self, priority):
+        '''calculating values of sliders on toplevel'''
+        con_1_value = 0
+        con_2_value = 0
+        con_3_value = 0
+
         config = UiFunc.readConfigFile()
         activated_supply = []
         for i in range(1, 4):
@@ -148,22 +153,46 @@ class UiFunc:
             con_1_value = self.slider_container_1.value
             config.set("portionsettings", "c1_percentage", str(con_1_value))
             print(con_1_value)
-        else:
-            con_1_value = 0
+        else: # if slider is deactivated -> set to 0 and refresh slider
+            self.slider_container_1.value = 0
+            self.slider_container_1.draw()
         
+
         if activated_supply[1] == str(True):
             con_2_value = self.slider_container_2.value
             config.set("portionsettings", "c2_percentage", str(con_2_value))
             print(con_2_value)
         else:
-            con_1_value = 0
+            self.slider_container_2.value = 0
+            self.slider_container_2.draw()
+
 
         if activated_supply[2] == str(True):
             con_3_value = self.slider_container_3.value
             config.set("portionsettings", "c3_percentage", str(con_3_value))
             print(con_3_value)
         else:
-            con_3_value = 0
+            self.slider_container_3.value = 0
+            self.slider_container_3.draw()
+
+        if priority == 1:
+            print("container 1 is moving")
+            # if con_1_value + con_2_value + con_3_value < 1:
+            #     if con_2_value 
+        if priority == 2:
+            print("container 2 is moving")        
+        if priority == 3:
+            print("container 3 is moving")
+            
+
+        calc_kcal = (int(config.get("c1", "kcal")) * con_1_value) + (int(config.get("c2", "kcal")) * con_2_value) + (int(config.get("c3", "kcal")) * con_3_value)
+        calc_fat = (int(config.get("c1", "fat")) * con_1_value) + (int(config.get("c2", "fat")) * con_2_value) + (int(config.get("c3", "fat")) * con_3_value)
+        calc_sugar = (int(config.get("c1", "sugar")) * con_1_value) + (int(config.get("c2", "sugar")) * con_2_value) + (int(config.get("c3", "sugar")) * con_3_value)
+        
+        self.calculated_kcal.configure(text=str(round(calc_kcal, 1)) + " Kcal")
+        self.calculated_fat.configure(text=str(round(calc_fat, 1)) + " Fett")
+        self.calculated_sugar.configure(text=str(round(calc_sugar, 1)) + " Zucker")
+        
 
 
         # main_supply = int(config.get("portionsettings", "main_supply_container"))
