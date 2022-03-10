@@ -21,9 +21,6 @@ class UiFunc:
         if self.button_portion_3.fg_color == BACKGROUND_COLOR_BUTTON:
             self.button_portion_3.configure(fg_color = BACKGROUND_LIGHT_COLOR_BUTTON)
 
-        if self.button_portion_4.fg_color == BACKGROUND_COLOR_BUTTON:
-            self.button_portion_4.configure(fg_color = BACKGROUND_LIGHT_COLOR_BUTTON)
-
         instance.configure(fg_color= BACKGROUND_COLOR_BUTTON)
         UiFunc.writeConfigFile("portionsettings", "size", str(count)) # get last letter of var - convert to int divide 1 and convert to str......
 
@@ -38,9 +35,6 @@ class UiFunc:
 
         if value == 3:
             self.button_portion_3.configure(fg_color = BACKGROUND_COLOR_BUTTON)
-
-        if value == 4:
-            self.button_portion_4.configure(fg_color = BACKGROUND_COLOR_BUTTON)
 
     # def openTopLevel(self):
     #     '''execute toplevel and open'''
@@ -94,7 +88,6 @@ class UiFunc:
             exec('self.container_' + str(i) + '_kcal.configure(text=config.get("c" + str(i), "kcal") + " Kcal/100g")')
             exec('self.container_' + str(i) + '_fat.configure(text=config.get("c" + str(i), "fat")  + "g Fett/100g")')
             exec('self.container_' + str(i) + '_sugar.configure(text=config.get("c" + str(i), "sugar") + "g Zucker/100g")')
-            exec('self.container_' + str(i) + '_percents_name.configure(text=str(round(float(config.get("c" + str(i), "fill_State")) * 100)) + "%")')
             exec('self.container_' + str(i) + '_percents_bar.set(float(config.get("c" + str(i), "fill_state")))')
             # /setup all container details
 
