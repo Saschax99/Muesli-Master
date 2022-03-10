@@ -32,7 +32,7 @@ class InitializeTopLevelTkWindow:
         self.top_frame = Frame(master, 
                                height=40, 
                                width=800, 
-                               bg=BACKGROUND_COLOR_BORDERS)
+                               bg=BACKGROUND_TOP_COLOR_BORDERS)
         self.top_frame.place(x=BORDER_TOP_X,y=BORDER_TOP_Y)
 
 
@@ -43,7 +43,7 @@ class InitializeTopLevelTkWindow:
         # title name
         self.top_name = Label(self.top_frame, 
                               text="Einstellungen",
-                              bg=BACKGROUND_COLOR_BORDERS, 
+                              bg=BACKGROUND_TOP_COLOR_BORDERS, 
                               fg="white",
                               width=12, 
                               font=(TEXT_FONT, TITLE_FONTSIZE)) 
@@ -54,8 +54,8 @@ class InitializeTopLevelTkWindow:
                                                    compound="right", 
                                                    text_font=(TEXT_FONT, STANDARD_FONTSIZE), 
                                                    text_color="white", 
-                                                   bg_color=BACKGROUND_COLOR_BORDERS,
-                                                   fg_color=BUTTON_COLOR_BORDERS,
+                                                   bg_color=BACKGROUND_TOP_COLOR_BORDERS,
+                                                   fg_color=BACKGROUND_COLOR_BUTTON,
                                                    hover_color=BUTTON_HOVER_COLOR_BORDERS,
                                                    command=lambda: UiFunc.closeTopLevel(self))
         self.button_back.place(x=722, y=20, anchor=CENTER)
@@ -339,7 +339,7 @@ class InitializeTopLevelTkWindow:
         Frame(master, 
               height=25, 
               width=800, 
-              bg=BACKGROUND_COLOR_BORDERS).place(x=BORDER_BOT_X,y=BORDER_BOT_Y)
+              bg=BACKGROUND_BOTTOM_COLOR_BORDERS).place(x=BORDER_BOT_X,y=BORDER_BOT_Y)
         Frame(master,
             height=3,
             width=800,

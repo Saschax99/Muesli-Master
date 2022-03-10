@@ -44,13 +44,13 @@ class InitializeMainTkWindow:
         self.top_frame = Frame(master, 
                                height=40, 
                                width=800, 
-                               bg=BACKGROUND_COLOR_BORDERS)
+                               bg=BACKGROUND_TOP_COLOR_BORDERS)
         self.top_frame.place(x=BORDER_TOP_X,y=BORDER_TOP_Y)
 
         Frame(master,
               height=3,
               width=800,
-              bg="#725eba").place(x=0, y=40)
+              bg=BACKGROUND_BORDER_COLOR).place(x=0, y=40)
 
         # title name
         # self.top_name = Label(self.top_frame, 
@@ -66,7 +66,7 @@ class InitializeMainTkWindow:
         #multiple image size by zoom
         pixels_x, pixels_y = tuple([int(zoom * x)  for x in image.size])
         img = ImageTk.PhotoImage(image.resize((pixels_x, pixels_y))) 
-        label = Label(self.top_frame, image=img, bg=BACKGROUND_COLOR_BORDERS)
+        label = Label(self.top_frame, image=img, bg=BACKGROUND_TOP_COLOR_BORDERS)
         label.image = img
         label.place(x=0, y=-15)
 
@@ -75,8 +75,8 @@ class InitializeMainTkWindow:
         self.button_port_settings = customtkinter.CTkButton(master=self.top_frame, 
                                            text="Portionseinstellungen", 
                                            text_color="white", 
-                                           bg_color=BACKGROUND_COLOR_BORDERS,
-                                           fg_color=BUTTON_COLOR_BORDERS,
+                                           bg_color=BACKGROUND_TOP_COLOR_BORDERS,
+                                           fg_color=BACKGROUND_COLOR_BUTTON,
                                            hover_color=BUTTON_HOVER_COLOR_BORDERS,
                                            command=lambda: openTopLevel(self))
         self.button_port_settings.place(x=706, y=20, anchor=CENTER)
@@ -123,10 +123,10 @@ class InitializeMainTkWindow:
         self.container_1_checkbox = customtkinter.CTkButton(self.container_1,
                                                             width=25,
                                                             height=25,
-                                                            fg_color=BACKGROUND_COLOR_BUTTON,
-                                                            bg_color="black",
+                                                            fg_color=CHECKBOX_COLOR,
+                                                            bg_color=CHECKBOX_COLOR,
                                                             hover_color=None,
-                                                            border_color="black",
+                                                            border_color=CHECKBOX_COLOR,
                                                             corner_radius=7,
                                                             text="")
         self.container_1_checkbox.place(x=118, y=8)
@@ -226,10 +226,10 @@ class InitializeMainTkWindow:
         self.container_2_checkbox = customtkinter.CTkButton(self.container_2,
                                                             width=25,
                                                             height=25,
-                                                            fg_color=BACKGROUND_COLOR_BUTTON,
-                                                            bg_color="black",
+                                                            fg_color=CHECKBOX_COLOR,
+                                                            bg_color=CHECKBOX_COLOR,
                                                             hover_color=None,
-                                                            border_color="black",
+                                                            border_color=CHECKBOX_COLOR,
                                                             corner_radius=7,
                                                             text="")
         self.container_2_checkbox.place(x=118, y=8)
@@ -331,10 +331,10 @@ class InitializeMainTkWindow:
         self.container_3_checkbox = customtkinter.CTkButton(self.container_3,
                                                             width=25,
                                                             height=25,
-                                                            fg_color=BACKGROUND_COLOR_BUTTON,
-                                                            bg_color="black",
+                                                            fg_color=CHECKBOX_COLOR,
+                                                            bg_color=CHECKBOX_COLOR,
                                                             hover_color=None,
-                                                            border_color="black",
+                                                            border_color=CHECKBOX_COLOR,
                                                             corner_radius=7,
                                                             text="")
         self.container_3_checkbox.place(x=118, y=8)
@@ -432,6 +432,8 @@ class InitializeMainTkWindow:
         self.button_portion_1 = customtkinter.CTkButton(master=self.container_portion, 
                                                         text="90 Gramm", 
                                                         fg_color=BACKGROUND_LIGHT_COLOR_BUTTON,
+                                                        text_color="white",
+                                                        hover_color=BUTTON_HOVER_COLOR_BORDERS,
                                                         command=lambda: UiFunc.portionButtonSwitch(self, self.button_portion_1, 1))
         self.button_portion_1.place(x=0 + 12, y=46)
 
@@ -439,6 +441,8 @@ class InitializeMainTkWindow:
         self.button_portion_2 = customtkinter.CTkButton(master=self.container_portion, 
                                                         text="150 Gramm", 
                                                         fg_color=BACKGROUND_LIGHT_COLOR_BUTTON,
+                                                        text_color="white",
+                                                        hover_color=BUTTON_HOVER_COLOR_BORDERS,
                                                         command=lambda: UiFunc.portionButtonSwitch(self, self.button_portion_2, 2))
         self.button_portion_2.place(x=0 + 12, y=88)
 
@@ -462,6 +466,8 @@ class InitializeMainTkWindow:
         self.button_portion_3 = customtkinter.CTkButton(master=self.container_portion, 
                                                         text="210 Gramm", 
                                                         fg_color=BACKGROUND_LIGHT_COLOR_BUTTON,
+                                                        text_color="white",
+                                                        hover_color=BUTTON_HOVER_COLOR_BORDERS,
                                                         command= lambda: UiFunc.portionButtonSwitch(self, self.button_portion_3, 3))
         self.button_portion_3.place(x=0 + 188, y=46)
 
@@ -469,6 +475,8 @@ class InitializeMainTkWindow:
         self.button_portion_4 = customtkinter.CTkButton(master=self.container_portion, 
                                                         text="270 Gramm", 
                                                         fg_color=BACKGROUND_LIGHT_COLOR_BUTTON,
+                                                        text_color="white",
+                                                        hover_color=BUTTON_HOVER_COLOR_BORDERS,
                                                         command=lambda: UiFunc.portionButtonSwitch(self, self.button_portion_4, 4))
         self.button_portion_4.place(x=0 + 188, y=88)
 
@@ -548,6 +556,7 @@ class InitializeMainTkWindow:
                                            width=200, 
                                            height=35,
                                            text_color="white", 
+                                           fg_color=BACKGROUND_COLOR_BUTTON,
                                            bg_color=BACKGROUND_COLOR,
                                            text_font=(TEXT_FONT, TITLE_FONTSIZE), 
                                            command=lambda: InitializeMainTkWindow.test(self))
@@ -556,18 +565,18 @@ class InitializeMainTkWindow:
         self.bot_frame = Frame(master, 
                                height=25, 
                                width=800, 
-                               bg=BACKGROUND_COLOR_BORDERS)
+                               bg=BACKGROUND_BOTTOM_COLOR_BORDERS)
         self.bot_frame.place(x=BORDER_BOT_X,y=BORDER_BOT_Y)
 
         Frame(master,
             height=3,
             width=800,
-            bg="#725eba").place(x=0, y=452)
+            bg=BACKGROUND_BORDER_COLOR).place(x=0, y=452)
 
 
         self.bot_date = Label(self.bot_frame, 
                               text="12:20 | 15.02.2022",
-                              bg=BACKGROUND_COLOR_BORDERS,  
+                              bg=BACKGROUND_BOTTOM_COLOR_BORDERS,  
                               fg=TEXT_BORDER_COLOR,
                               justify=LEFT,
                               anchor="w",
@@ -579,7 +588,7 @@ class InitializeMainTkWindow:
 
         self.bot_footer = Label(self.bot_frame, 
                               text="S. Dolgow | M. Nicolaisen © 2022",
-                              bg=BACKGROUND_COLOR_BORDERS,  
+                              bg=BACKGROUND_BOTTOM_COLOR_BORDERS,  
                               fg=TEXT_BORDER_COLOR,
                             justify=RIGHT,
                               anchor="e",

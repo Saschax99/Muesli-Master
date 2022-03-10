@@ -1,8 +1,6 @@
 import configparser
-from multiprocessing.dummy import active_children
 
-from numpy import true_divide
-from config import BACKGROUND_COLOR_BUTTON, BACKGROUND_LIGHT_COLOR_BUTTON, CONFIG_PATH
+from config import BACKGROUND_COLOR_BUTTON, BACKGROUND_LIGHT_COLOR_BUTTON, CONFIG_PATH, CHECKBOX_COLOR
 from datetime import datetime
 import time
 import threading
@@ -110,14 +108,14 @@ class UiFunc:
             self.configure(fg_color="white")
             UiFunc.writeConfigFile("c" + str(count), "supply_active", str(False))
         else:
-            self.configure(fg_color=BACKGROUND_COLOR_BUTTON)
+            self.configure(fg_color=CHECKBOX_COLOR)
             UiFunc.writeConfigFile("c" + str(count), "supply_active", str(True))
 
 
     def CheckboxStartup(self):
         for i in range(1, 4):
             if config.get("c" + str(i), "supply_active") == str(True):
-                exec('self.container_' + str(i) + '_checkbox.configure(fg_color=BACKGROUND_COLOR_BUTTON)')
+                exec('self.container_' + str(i) + '_checkbox.configure(fg_color=CHECKBOX_COLOR)')
             else:
                 exec('self.container_' + str(i) + '_checkbox.configure(fg_color="white")')
 
