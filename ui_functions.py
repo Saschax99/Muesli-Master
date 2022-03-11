@@ -1,6 +1,6 @@
 import configparser
 
-from config import BACKGROUND_COLOR_BUTTON, BACKGROUND_LIGHT_COLOR_BUTTON, CONFIG_PATH, CHECKBOX_COLOR
+from config import BACKGROUND_COLOR_BUTTON, BUTTON_HOVER_COLOR_BORDERS, CONFIG_PATH, CHECKBOX_COLOR
 from datetime import datetime
 import time
 import threading
@@ -12,29 +12,29 @@ class UiFunc:
     
     def portionButtonSwitch(self, instance, count):
         '''setup portion size with switches'''
-        if self.button_portion_1.fg_color == BACKGROUND_COLOR_BUTTON:
-            self.button_portion_1.configure(fg_color = BACKGROUND_LIGHT_COLOR_BUTTON)
+        if self.button_portion_1.fg_color == BUTTON_HOVER_COLOR_BORDERS:
+            self.button_portion_1.configure(fg_color = BACKGROUND_COLOR_BUTTON)
 
-        if self.button_portion_2.fg_color == BACKGROUND_COLOR_BUTTON:
-            self.button_portion_2.configure(fg_color = BACKGROUND_LIGHT_COLOR_BUTTON)
+        if self.button_portion_2.fg_color == BUTTON_HOVER_COLOR_BORDERS:
+            self.button_portion_2.configure(fg_color = BACKGROUND_COLOR_BUTTON)
 
-        if self.button_portion_3.fg_color == BACKGROUND_COLOR_BUTTON:
-            self.button_portion_3.configure(fg_color = BACKGROUND_LIGHT_COLOR_BUTTON)
+        if self.button_portion_3.fg_color == BUTTON_HOVER_COLOR_BORDERS:
+            self.button_portion_3.configure(fg_color = BACKGROUND_COLOR_BUTTON)
 
-        instance.configure(fg_color= BACKGROUND_COLOR_BUTTON)
+        instance.configure(fg_color= BUTTON_HOVER_COLOR_BORDERS)
         UiFunc.writeConfigFile("portionsettings", "size", str(count)) # get last letter of var - convert to int divide 1 and convert to str......
 
     def portionButtonStartup(self):
         '''setup portion size on startup'''
         value = int(config.get("portionsettings", "size"))
         if value == 1:
-            self.button_portion_1.configure(fg_color = BACKGROUND_COLOR_BUTTON)
+            self.button_portion_1.configure(fg_color = BUTTON_HOVER_COLOR_BORDERS)
 
         if value == 2:
-            self.button_portion_2.configure(fg_color = BACKGROUND_COLOR_BUTTON)
+            self.button_portion_2.configure(fg_color = BUTTON_HOVER_COLOR_BORDERS)
 
         if value == 3:
-            self.button_portion_3.configure(fg_color = BACKGROUND_COLOR_BUTTON)
+            self.button_portion_3.configure(fg_color = BUTTON_HOVER_COLOR_BORDERS)
 
     # def openTopLevel(self):
     #     '''execute toplevel and open'''
