@@ -24,9 +24,7 @@ class InitializeTopLevelTkWindow:
 
         InitializeTopLevelTkWindow.loadBottomBar(self, master)
 
-        UiFunc.CheckboxStartup(self)
-
-        UiFunc.resizeSlider(self)
+        UiFunc.updateCheckboxValues(self)
 
     def loadTopBar(self, master):
         self.top_frame = Frame(master, 
@@ -103,7 +101,7 @@ class InitializeTopLevelTkWindow:
                                width=self.slider_container_1_name.winfo_reqwidth(),
                                height=2,
                                corner_radius=10,
-                               fg_color=MATERIALS_LIGHT_BORDER).place(x=int(self.container_title_container_1_ref_coords.get("x")), y=int(self.container_title_container_1_ref_coords.get("y")) + 28)
+                               fg_color=MATERIALS_STANDARD_BORDER).place(x=int(self.container_title_container_1_ref_coords.get("x")), y=int(self.container_title_container_1_ref_coords.get("y")) + 28)
 
         self.slider_container_1 = customtkinter.CTkSlider(master=self.container_sliders,
                                                    width=200,
@@ -167,7 +165,7 @@ class InitializeTopLevelTkWindow:
                                width=self.slider_container_2_name.winfo_reqwidth(),
                                height=2,
                                corner_radius=10,
-                               fg_color=MATERIALS_LIGHT_BORDER).place(x=int(self.container_title_container_2_ref_coords.get("x")), y=int(self.container_title_container_2_ref_coords.get("y")) + 28)
+                               fg_color=MATERIALS_STANDARD_BORDER).place(x=int(self.container_title_container_2_ref_coords.get("x")), y=int(self.container_title_container_2_ref_coords.get("y")) + 28)
 
 
         self.slider_container_2 = customtkinter.CTkSlider(master=self.container_sliders,
@@ -234,7 +232,7 @@ class InitializeTopLevelTkWindow:
                                width=self.slider_container_3_name.winfo_reqwidth(),
                                height=2,
                                corner_radius=10,
-                               fg_color=MATERIALS_LIGHT_BORDER).place(x=int(self.container_title_container_3_ref_coords.get("x")), y=int(self.container_title_container_3_ref_coords.get("y")) + 28)
+                               fg_color=MATERIALS_STANDARD_BORDER).place(x=int(self.container_title_container_3_ref_coords.get("x")), y=int(self.container_title_container_3_ref_coords.get("y")) + 28)
 
         self.slider_container_3 = customtkinter.CTkSlider(master=self.container_sliders,
                                                    width=200,
@@ -276,7 +274,7 @@ class InitializeTopLevelTkWindow:
                                width=self.container_sliders.winfo_reqwidth(),
                                height=2,
                                corner_radius=10,
-                               fg_color=MATERIALS_LIGHT_BORDER).place(x=0, y=295)
+                               fg_color=MATERIALS_STANDARD_BORDER).place(x=0, y=295)
 
         self.calculated_name = Label(self.container_sliders, 
                                       text="Eingestellte Nährwerte auf 100g",
@@ -297,7 +295,7 @@ class InitializeTopLevelTkWindow:
                                width=2,
                                height=50,
                                corner_radius=10,
-                               fg_color=MATERIALS_LIGHT_BORDER).place(x=160, y=297)
+                               fg_color=MATERIALS_STANDARD_BORDER).place(x=160, y=297)
 
         self.calculated_fat = Label(self.container_sliders, 
                                       text="XX Fett",
@@ -310,7 +308,7 @@ class InitializeTopLevelTkWindow:
                                width=2,
                                height=50,
                                corner_radius=10,
-                               fg_color=MATERIALS_LIGHT_BORDER).place(x=320, y=297)     
+                               fg_color=MATERIALS_STANDARD_BORDER).place(x=320, y=297)     
 
         self.calculated_sugar = Label(self.container_sliders, 
                                       text="XX Zucker",

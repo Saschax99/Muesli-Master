@@ -2,7 +2,7 @@
 # https://www.raspberrypi-spy.co.uk/2017/11/how-to-rotate-the-raspberry-pi-display-output/#prettyPhoto
 from matplotlib import container
 import customtkinter
-from tkinter import Label, Frame, CENTER, LEFT, RIGHT
+from tkinter import Label, Frame, CENTER, LEFT, RIGHT, DISABLED
 from PIL import Image, ImageTk
 from config import *
 from ui_functions import UiFunc
@@ -36,11 +36,15 @@ class InitializeMainTkWindow:
 
         UiFunc.updateContainerValues(self)
 
-        UiFunc.portionButtonStartup(self)
-        UiFunc.CheckboxStartup(self)
+        UiFunc.updatePortionValues(self)
+        UiFunc.updatePortionSizesValues(self)
+        UiFunc.updateResultSize(self)
+        
+
+        UiFunc.updateCheckboxValues(self)
         #UiFunc.writeConfigFile("c1", "kcal", "12341")
 
-        #endregion LOADING IN
+        #endregion /LOADING IN
 
     def loadTopBar(self, master):
         self.top_frame = Frame(master, 
@@ -131,7 +135,7 @@ class InitializeMainTkWindow:
                                                             corner_radius=7,
                                                             text="")
         self.container_1_checkbox.place(x=118 + 30, y=8)
-        self.container_1_checkbox.configure(command = lambda: UiFunc.switchCheckboxState(self.container_1_checkbox, 1))
+        self.container_1_checkbox.configure(command = lambda: UiFunc.switchCheckboxState(self, self.container_1_checkbox, 1))
 
 
         self.container_1_kcal = Label(self.container_1, 
@@ -201,7 +205,8 @@ class InitializeMainTkWindow:
                                            corner_radius=3,
                                            text_font=(TEXT_FONT, TITLE_FONTSIZE + 1),
                                            fg_color=BACKGROUND_COLOR_BUTTON,
-                                           hover_color=BUTTON_HOVER_COLOR_BORDERS)
+                                           hover_color=BUTTON_HOVER_COLOR_BORDERS,
+                                           command=lambda: UiFunc.decreasePortionAmount(self, 1))
         self.button_container_1_dec.place(x=0, y=0)
 
 
@@ -215,7 +220,8 @@ class InitializeMainTkWindow:
                                            corner_radius=3,
                                            text_font=(TEXT_FONT, TITLE_FONTSIZE + 1),                                          
                                            fg_color=BACKGROUND_COLOR_BUTTON,
-                                           hover_color=BUTTON_HOVER_COLOR_BORDERS)
+                                           hover_color=BUTTON_HOVER_COLOR_BORDERS,
+                                           command=lambda: UiFunc.increasePortionAmount(self, 1))
         self.button_container_1_inc.place(x=185, y=0)
 
     def loadContainerMiddle(self, master):
@@ -261,7 +267,7 @@ class InitializeMainTkWindow:
                                                             corner_radius=7,
                                                             text="")
         self.container_2_checkbox.place(x=118 + 30, y=8)
-        self.container_2_checkbox.configure(command = lambda: UiFunc.switchCheckboxState(self.container_2_checkbox, 2))
+        self.container_2_checkbox.configure(command = lambda: UiFunc.switchCheckboxState(self, self.container_2_checkbox, 2))
 
 
         self.container_2_kcal = Label(self.container_2, 
@@ -331,7 +337,8 @@ class InitializeMainTkWindow:
                                            corner_radius=3,
                                            text_font=(TEXT_FONT, TITLE_FONTSIZE + 1),
                                            fg_color=BACKGROUND_COLOR_BUTTON,
-                                           hover_color=BUTTON_HOVER_COLOR_BORDERS)
+                                           hover_color=BUTTON_HOVER_COLOR_BORDERS,
+                                           command=lambda: UiFunc.decreasePortionAmount(self, 2))
         self.button_container_2_dec.place(x=0, y=0)
 
 
@@ -345,7 +352,8 @@ class InitializeMainTkWindow:
                                            corner_radius=3,
                                            text_font=(TEXT_FONT, TITLE_FONTSIZE + 1),
                                            fg_color=BACKGROUND_COLOR_BUTTON,
-                                           hover_color=BUTTON_HOVER_COLOR_BORDERS)
+                                           hover_color=BUTTON_HOVER_COLOR_BORDERS,
+                                           command=lambda: UiFunc.increasePortionAmount(self, 2))
         self.button_container_2_inc.place(x=185, y=0)
 
     def loadContainerRight(self, master):
@@ -390,8 +398,7 @@ class InitializeMainTkWindow:
                                                             corner_radius=7,
                                                             text="")
         self.container_3_checkbox.place(x=118 + 30, y=8)
-        self.container_3_checkbox.configure(command = lambda: UiFunc.switchCheckboxState(self.container_3_checkbox, 3))
-
+        self.container_3_checkbox.configure(command = lambda: UiFunc.switchCheckboxState(self, self.container_3_checkbox, 3))
 
         self.container_3_kcal = Label(self.container_3, 
                                       text="xxx Kcal/100g",
@@ -460,7 +467,8 @@ class InitializeMainTkWindow:
                                            corner_radius=3,
                                            text_font=(TEXT_FONT, TITLE_FONTSIZE + 1),
                                            fg_color=BACKGROUND_COLOR_BUTTON,
-                                           hover_color=BUTTON_HOVER_COLOR_BORDERS)
+                                           hover_color=BUTTON_HOVER_COLOR_BORDERS,
+                                           command=lambda: UiFunc.decreasePortionAmount(self, 3))
         self.button_container_3_dec.place(x=0, y=0)
 
 
@@ -474,7 +482,8 @@ class InitializeMainTkWindow:
                                            corner_radius=3,
                                            text_font=(TEXT_FONT, TITLE_FONTSIZE + 1),
                                            fg_color=BACKGROUND_COLOR_BUTTON,
-                                           hover_color=BUTTON_HOVER_COLOR_BORDERS)
+                                           hover_color=BUTTON_HOVER_COLOR_BORDERS,
+                                           command=lambda: UiFunc.increasePortionAmount(self, 3))
         self.button_container_3_inc.place(x=185, y=0)
 
     def loadPortionSize(self, master):
@@ -509,14 +518,15 @@ class InitializeMainTkWindow:
 
 
         self.button_portion_1 = customtkinter.CTkButton(master=self.container_portion, 
-                                                        text="6 Schaufeln", 
-                                                        width=75,
+                                                        text="x Schaufeln", 
+                                                        width=104,
                                                         fg_color=BACKGROUND_COLOR_BUTTON,
                                                         text_color="white",
                                                         text_font=(TEXT_FONT, SMALL_FONTSIZE + 1),
                                                         hover_color=BUTTON_HOVER_COLOR_BORDERS,
-                                                        command=lambda: UiFunc.portionButtonSwitch(self, self.button_portion_1, 1))
+                                                        command=lambda: UiFunc.portionButtonSwitch(self, self.button_portion_1, 0))
         self.button_portion_1.place(x=3, y=46)
+
 
         self.border_2_container_portion_vertical = customtkinter.CTkFrame(master=self.container_portion,
                                                                  width=2,
@@ -526,13 +536,13 @@ class InitializeMainTkWindow:
         self.border_2_container_portion_vertical.place(x=110, y=42)
 
         self.button_portion_2 = customtkinter.CTkButton(master=self.container_portion, 
-                                                        text="9 Schaufeln", 
-                                                        width=75,
+                                                        text="x Schaufeln", 
+                                                        width=104,
                                                         fg_color=BACKGROUND_COLOR_BUTTON,
                                                         text_color="white",
                                                         text_font=(TEXT_FONT, SMALL_FONTSIZE + 1),
                                                         hover_color=BUTTON_HOVER_COLOR_BORDERS,
-                                                        command=lambda: UiFunc.portionButtonSwitch(self, self.button_portion_2, 2))
+                                                        command=lambda: UiFunc.portionButtonSwitch(self, self.button_portion_2, 1))
         self.button_portion_2.place(x=118, y=46)
 
       
@@ -545,13 +555,13 @@ class InitializeMainTkWindow:
 
         
         self.button_portion_3 = customtkinter.CTkButton(master=self.container_portion, 
-                                                        text="12 Schaufeln", 
-                                                        width=75,
+                                                        text="xx Schaufeln", 
+                                                        width=104,
                                                         fg_color=BACKGROUND_COLOR_BUTTON,
                                                         text_color="white",
                                                         text_font=(TEXT_FONT, SMALL_FONTSIZE + 1),
                                                         hover_color=BUTTON_HOVER_COLOR_BORDERS,
-                                                        command= lambda: UiFunc.portionButtonSwitch(self, self.button_portion_3, 3))
+                                                        command= lambda: UiFunc.portionButtonSwitch(self, self.button_portion_3, 2))
         self.button_portion_3.place(x=234, y=46)
 
     def loadNutritionalValues(self, master):
