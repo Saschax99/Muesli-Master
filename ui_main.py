@@ -1,8 +1,7 @@
 #Import all the necessary libraries
 # https://www.raspberrypi-spy.co.uk/2017/11/how-to-rotate-the-raspberry-pi-display-output/#prettyPhoto
-from matplotlib import container
 import customtkinter
-from tkinter import Label, Frame, CENTER, LEFT, RIGHT, DISABLED
+from tkinter import Label, Frame, CENTER, LEFT, RIGHT
 from PIL import Image, ImageTk
 from config import *
 from ui_functions import UiFunc
@@ -40,7 +39,7 @@ class InitializeMainTkWindow:
         UiFunc.updatePortionSizesValues(self)
         UiFunc.updateResultSize(self)
         
-
+        UiFunc.calculateResultValues(self)
         UiFunc.updateCheckboxValues(self)
         #UiFunc.writeConfigFile("c1", "kcal", "12341")
 
@@ -67,7 +66,7 @@ class InitializeMainTkWindow:
         #                       font=(TEXT_FONT, TITLE_FONTSIZE)) 
         # self.top_name.place(x=30, y=5)
 
-        image = Image.open('pictures/logo.PNG')
+        image = Image.open(PICTURE_PATH)
         zoom = .19
         #multiple image size by zoom
         pixels_x, pixels_y = tuple([int(zoom * x)  for x in image.size])
@@ -644,7 +643,7 @@ class InitializeMainTkWindow:
                                            bg_color=BACKGROUND_COLOR,
                                            hover_color=BUTTON_HOVER_COLOR_BORDERS,
                                            text_font=(TEXT_FONT, TITLE_FONTSIZE), 
-                                           command=lambda: InitializeMainTkWindow.test(self))
+                                           command=lambda: InitializeMainTkWindow.openServeDialog(self))
         self.button_start.place(x=400, y=412, anchor=CENTER)
 
         self.bot_frame = Frame(master, 
@@ -688,24 +687,6 @@ class InitializeMainTkWindow:
                                corner_radius = 3,
                                fg_color = color).place(x=posx - 2, y=posy - 2)     
 
-
-
-    def test(self):
-        print("Asdasd")
-
-        # config = UiFunc.readConfigFile()
-        # main_supply = int(config.get("portionsettings", "main_supply_container"))
-
-
-
-    # def portionButtonSwitch(self, instance):
-    #     if self.button_portion_1.fg_color == BACKGROUND_COLOR_BUTTON:
-    #         self.button_portion_1.configure(fg_color = BACKGROUND_LIGHT_COLOR_BUTTON)
-    #     if self.button_portion_2.fg_color == BACKGROUND_COLOR_BUTTON:
-    #         self.button_portion_2.configure(fg_color = BACKGROUND_LIGHT_COLOR_BUTTON)
-    #     if self.button_portion_3.fg_color == BACKGROUND_COLOR_BUTTON:
-    #         self.button_portion_3.configure(fg_color = BACKGROUND_LIGHT_COLOR_BUTTON)
-    #     if self.button_portion_4.fg_color == BACKGROUND_COLOR_BUTTON:
-    #         self.button_portion_4.configure(fg_color = BACKGROUND_LIGHT_COLOR_BUTTON)
-
-    #     instance.configure(fg_color= BACKGROUND_COLOR_BUTTON)
+    def openServeDialog(self):
+        customtkinter.CTkDialog(text="Wollen Sie die Portion Servieren?")
+        if DEBUG: print("opening serve dialog")

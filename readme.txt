@@ -1,3 +1,14 @@
+https://tkdocs.com/tutorial/styles.html
+https://github.com/TomSchimansky/CustomTkinter
+
+
+
+neue class um gui elemente darzustellen
+btn1 = class(var1,var2, ...)
+efficiency
+
+
+
 13.02.2022
     clean class functions for initialize materials
     done with container boxes
@@ -33,6 +44,9 @@
         max. and min. of amount
         resets container result value when changing portion size
 
+    mid:
+
+    commented container config
 
 git init
 git remote add origin https://github.com/Saschax99/Muesli-Master.git

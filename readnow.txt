@@ -1,8 +1,0 @@
-https://tkdocs.com/tutorial/styles.html
-https://github.com/TomSchimansky/CustomTkinter
-
-
-
-neue class um gui elemente darzustellen
-btn1 = class(var1,var2, ...)
-efficiency

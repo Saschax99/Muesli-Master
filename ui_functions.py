@@ -1,9 +1,11 @@
 import configparser
-from config import BACKGROUND_COLOR_BUTTON, BUTTON_HOVER_COLOR_BORDERS, CONFIG_PATH, CHECKBOX_COLOR, CONFIG_PORTIONS_NAME, BACKGROUND_COLOR_DISABLED_BUTTON
+from config import *
 from datetime import datetime
 import time
 import threading
 import sys
+import os
+import csv
 
 class UiFunc:
     '''All User Interface functions'''
@@ -25,6 +27,7 @@ class UiFunc:
         UiFunc.writeConfigFile(CONFIG_PORTIONS_NAME, "size_var", str(count))
         UiFunc.resetResultValues(self) # reset values when switching
         UiFunc.updateResultSize(self) # update result sizes
+        UiFunc.calculateResultValues(self) # update result labels and calc
 
     def updatePortionValues(self):
         '''update portion size button on startup'''
@@ -107,6 +110,7 @@ class UiFunc:
             UiFunc.writeConfigFile(CONFIG_PORTIONS_NAME, "c3_amount", str(c3_amount + 1))
 
         UiFunc.updateResultSize(self)
+        UiFunc.calculateResultValues(self)
 
     def decreasePortionAmount(self, con):
         '''decrease amount of containers portion size'''
@@ -117,7 +121,6 @@ class UiFunc:
         c_all_amount = c1_amount + c2_amount + c3_amount
 
         if int(c_all_amount) == 0: # if min reached return
-            print("if 0 return")
             return
 
         if con == 1:
@@ -136,6 +139,7 @@ class UiFunc:
             UiFunc.writeConfigFile(CONFIG_PORTIONS_NAME, "c3_amount", str(c3_amount - 1))
 
         UiFunc.updateResultSize(self)
+        UiFunc.calculateResultValues(self)
 
     def disableButton(self, count):
         if count == 1:
@@ -187,7 +191,7 @@ class UiFunc:
         '''reading config for containers'''
 
         try:
-            parser_file = configparser.ConfigParser()
+            parser_file = configparser.ConfigParser(allow_no_value=True, comment_prefixes='///')
             parser_file.read(CONFIG_PATH, encoding='utf-8')
             return parser_file
         except Exception as e:
@@ -206,15 +210,25 @@ class UiFunc:
 
         for i in range(1, 4): # roll container 1 to 3
             # setup all container details
-            exec('self.container_' + str(i) + '_name.configure(text=config.get("c" + str(i), "name"))')
-            exec('self.container_' + str(i) + '_kcal.configure(text=config.get("c" + str(i), "kcal") + " Kcal/100g")')
-            exec('self.container_' + str(i) + '_fat.configure(text=config.get("c" + str(i), "fat")  + "g Fett/100g")')
-            exec('self.container_' + str(i) + '_sugar.configure(text=config.get("c" + str(i), "sugar") + "g Zucker/100g")')
-            exec('self.container_' + str(i) + '_percents_bar.set(float(config.get("c" + str(i), "fill_state")))')
+            exec('self.container_'
+                + str(i)
+                + '_name.configure(text=config.get("c" + str(i), "name"))')
+
+            exec('self.container_'
+                 + str(i) 
+                 + '_kcal.configure(text=config.get("c" + str(i), "kcal") + " Kcal/100g")')
+
+            exec('self.container_' 
+                 + str(i)
+                 + '_fat.configure(text=config.get("c" + str(i), "fat")  + "g Fett/100g")')
+            exec('self.container_' 
+                 + str(i) 
+                 + '_sugar.configure(text=config.get("c" + str(i), "sugar") + "g Zucker/100g")')
+
+            exec('self.container_' 
+                 + str(i) 
+                 + '_percents_bar.set(float(config.get("c" + str(i), "fill_state")))')
             # /setup all container details
-
-            #exec('self.checkbox_' + str(i) + '_var.set(config.get("c" + str(i), "supply_active"))') # setup supply actived
-
 
     #region checkboxes
     def switchCheckboxState(self, instance, count):
@@ -227,6 +241,7 @@ class UiFunc:
             UiFunc.updateResultSize(self)
             UiFunc.updatePortionValues(self)
             UiFunc.disableButton(self, count)
+            UiFunc.calculateResultValues(self)
 
         else:
             instance.configure(fg_color=CHECKBOX_COLOR)
@@ -245,14 +260,99 @@ class UiFunc:
             if config.get("c" + str(i), "supply_active") == str(False): # at startup disable buttons if supply is deactivated
                 UiFunc.resetResultValues(self, i) # not necessary
                 UiFunc.disableButton(self, i)      
-
     #endregion checkboxes
+
+    #region result calculation
+    def calculateResultValues(self):
+        '''calculate result values for portion'''
+
+        c1_count = float(config.get("portionsettings", "c1_amount"))
+        c2_count = float(config.get("portionsettings", "c2_amount"))
+        c3_count = float(config.get("portionsettings", "c3_amount"))
+
+        c1_kcal = float(config.get("c1", "kcal"))
+        c1_fat = float(config.get("c1", "fat"))
+        c1_sugar = float(config.get("c1", "sugar"))
+
+        c2_kcal = float(config.get("c2", "kcal"))
+        c2_fat = float(config.get("c2", "fat"))
+        c2_sugar = float(config.get("c2", "sugar"))
+
+        c3_kcal = float(config.get("c3", "kcal"))
+        c3_fat = float(config.get("c3", "fat"))
+        c3_sugar = float(config.get("c3", "sugar"))
+
+        kcal_result = round(((c1_count * (c1_kcal))
+         + (c2_count * (c2_kcal))
+         + (c3_count * (c3_kcal)))
+         / CALCULATION_RATIO, 1)
+
+        fat_result = round(((c1_count * (c1_fat))
+         + (c2_count * (c2_fat))
+         + (c3_count * (c3_fat)))
+         / CALCULATION_RATIO, 1)
+
+        sugar_result = round(((c1_count * (c1_sugar))
+         + (c2_count * (c2_sugar))
+         + (c3_count * (c3_sugar))) 
+         / CALCULATION_RATIO, 1)
+
+        UiFunc.writeConfigFile("portionsettings", "kcal", str(kcal_result))
+        UiFunc.writeConfigFile("portionsettings", "fat", str(fat_result))
+        UiFunc.writeConfigFile("portionsettings", "sugar", str(sugar_result))
+
+        UiFunc.updateResult(self, kcal_result, fat_result, sugar_result)
+
+    def updateResult(self, kcal, fat, sugar):
+        '''updating result portion'''
+
+        self.label_portion_nutritional_values_kcal.configure(text=str(kcal) + " Kcal")
+        self.label_portion_nutritional_values_fat.configure(text=str(fat) + " Fett")
+        self.label_portion_nutritional_values_sugar.configure(text=str(sugar) + " Zucker")
+
+    def serve():
+        if DEBUG: print("Serving...")
+
+        amount = int(config.get("portionsettings", "c1_amount"))
+        + int(config.get("portionsettings", "c2_amount"))
+        + int(config.get("portionsettings", "c3_amount"))
+
+        if amount <= 0: # if 0 quit
+            print("no amount set")
+            return
+            
+        kcal = config.get("portionsettings", "kcal")
+        fat = config.get("portionsettings", "fat")
+        sugar = config.get("portionsettings", "sugar")
+
+        with open(LOGSYSTEM_PATH, 'r') as csv: # get number of entries
+            lines = csv.readlines()
+
+        UiFunc.writeLog(len(lines), amount, kcal, fat, sugar)
+
+    def writeLog(row1, row2, row3, row4, row5):
+        '''write or create csv file'''
+
+        with open(LOGSYSTEM_PATH, 'a', newline='', encoding='utf-8') as f:
+            writer = csv.writer(f, delimiter=';')
+            writer.writerow([row1, row2, row3, row4, row5])
+
+    def logging():
+        '''logging system | create'''
+
+        if not os.path.isfile(LOGSYSTEM_PATH):
+            if DEBUG: print("creating new csv file..")
+            UiFunc.writeLog("Nr.", "Portionsmenge", "Kcal", "Fett", "Zucker")
+
+    #endregion result calculation
+
 
     def closeTopLevel(self):
         #UiFunc.CheckboxStartup(self)
         self.master.destroy()
         
     #endregion TOPLEVEL
+
 
 
 config = UiFunc.readConfigFile()        
