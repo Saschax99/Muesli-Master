@@ -1,5 +1,5 @@
 from tkinter import Toplevel
-from ui_toplevel import InitializeTopLevelTkWindow
+from ui.ui_toplevel import InitializeTopLevelTkWindow
 
 def openTopLevel(self):
         '''execute toplevel and open'''

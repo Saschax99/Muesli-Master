@@ -67,7 +67,7 @@ CONTAINER_SLIDER_HEIGHT = 332
 PICTURE_PATH = f'pictures/logo white.PNG'
 
 # CONFIG PATH
-CONFIG_PATH = f'container_config.ini'
+CONFIG_PATH = f'config/container_config.ini'
 CONFIG_PORTIONS_NAME = f'portionsettings'
 LOGSYSTEM_PATH = f'logsystem.csv'
 

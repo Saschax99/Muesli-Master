@@ -1,11 +1,10 @@
 import configparser
-from config import *
+from config.config import *
 from datetime import datetime
 import time
 import threading
 import sys
-import os
-import csv
+from loggingsystem import writeLog
 
 class UiFunc:
     '''All User Interface functions'''
@@ -283,19 +282,19 @@ class UiFunc:
         c3_sugar = float(config.get("c3", "sugar"))
 
         kcal_result = round(((c1_count * (c1_kcal))
-         + (c2_count * (c2_kcal))
-         + (c3_count * (c3_kcal)))
-         / CALCULATION_RATIO, 1)
+                            + (c2_count * (c2_kcal))
+                            + (c3_count * (c3_kcal)))
+                            / CALCULATION_RATIO, 1)
 
         fat_result = round(((c1_count * (c1_fat))
-         + (c2_count * (c2_fat))
-         + (c3_count * (c3_fat)))
-         / CALCULATION_RATIO, 1)
+                            + (c2_count * (c2_fat))
+                            + (c3_count * (c3_fat)))
+                            / CALCULATION_RATIO, 1)
 
         sugar_result = round(((c1_count * (c1_sugar))
-         + (c2_count * (c2_sugar))
-         + (c3_count * (c3_sugar))) 
-         / CALCULATION_RATIO, 1)
+                            + (c2_count * (c2_sugar))
+                            + (c3_count * (c3_sugar))) 
+                            / CALCULATION_RATIO, 1)
 
         UiFunc.writeConfigFile("portionsettings", "kcal", str(kcal_result))
         UiFunc.writeConfigFile("portionsettings", "fat", str(fat_result))
@@ -313,9 +312,9 @@ class UiFunc:
     def serve():
         if DEBUG: print("Serving...")
 
-        amount = int(config.get("portionsettings", "c1_amount"))
-        + int(config.get("portionsettings", "c2_amount"))
-        + int(config.get("portionsettings", "c3_amount"))
+        amount = (int(config.get("portionsettings", "c1_amount"))
+                + int(config.get("portionsettings", "c2_amount"))
+                + int(config.get("portionsettings", "c3_amount")))
 
         if amount <= 0: # if 0 quit
             print("no amount set")
@@ -328,21 +327,9 @@ class UiFunc:
         with open(LOGSYSTEM_PATH, 'r') as csv: # get number of entries
             lines = csv.readlines()
 
-        UiFunc.writeLog(len(lines), amount, kcal, fat, sugar)
-
-    def writeLog(row1, row2, row3, row4, row5):
-        '''write or create csv file'''
-
-        with open(LOGSYSTEM_PATH, 'a', newline='', encoding='utf-8') as f:
-            writer = csv.writer(f, delimiter=';')
-            writer.writerow([row1, row2, row3, row4, row5])
-
-    def logging():
-        '''logging system | create'''
-
-        if not os.path.isfile(LOGSYSTEM_PATH):
-            if DEBUG: print("creating new csv file..")
-            UiFunc.writeLog("Nr.", "Portionsmenge", "Kcal", "Fett", "Zucker")
+        now = datetime.now()
+        dt_string = now.strftime("%H:%M:%S | %d.%m.%Y")
+        writeLog(len(lines), amount, kcal, fat, sugar, dt_string)
 
     #endregion result calculation
 

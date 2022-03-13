@@ -1,9 +1,8 @@
 #Import all the necessary libraries
 import customtkinter
 from tkinter import Label, Frame, CENTER, LEFT, RIGHT
-from config import *
-import math
-from ui_functions import UiFunc
+from config.config import *
+from ui.ui_functions import UiFunc
 
 class InitializeTopLevelTkWindow:
     def __init__(self, master):

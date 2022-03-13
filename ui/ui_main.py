@@ -3,8 +3,8 @@
 import customtkinter
 from tkinter import Label, Frame, CENTER, LEFT, RIGHT
 from PIL import Image, ImageTk
-from config import *
-from ui_functions import UiFunc
+from config.config import *
+from ui.ui_functions import UiFunc
 from functions import openTopLevel
 
 class InitializeMainTkWindow:
@@ -41,8 +41,7 @@ class InitializeMainTkWindow:
         
         UiFunc.calculateResultValues(self)
         UiFunc.updateCheckboxValues(self)
-        #UiFunc.writeConfigFile("c1", "kcal", "12341")
-
+        
         #endregion /LOADING IN
 
     def loadTopBar(self, master):

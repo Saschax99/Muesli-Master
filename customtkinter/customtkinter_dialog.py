@@ -3,8 +3,8 @@ from customtkinter.customtkinter_label import CTkLabel
 from customtkinter.customtkinter_button import CTkButton
 from customtkinter.customtkinter_color_manager import CTkColorManager
 
-from config import BUTTON_HOVER_COLOR_BORDERS, BACKGROUND_COLOR_BUTTON, TEXT_FONT, STANDARD_FONTSIZE, BACKGROUND_COLOR
-from ui_functions import UiFunc
+from config.config import BUTTON_HOVER_COLOR_BORDERS, BACKGROUND_COLOR_BUTTON, TEXT_FONT, STANDARD_FONTSIZE, BACKGROUND_COLOR
+from ui.ui_functions import UiFunc
 
 class CTkDialog:
     def __init__(self,
