@@ -164,6 +164,6 @@ class TLevel:
 
     def updateContainerNames(self):
         config = UiFunc.readConfigFile()
-        self.container_1_settings.configure(text=config.get("c1", "name") + " bearbeiten")
-        self.container_2_settings.configure(text=config.get("c2", "name") + " bearbeiten")
-        self.container_3_settings.configure(text=config.get("c3", "name") + " bearbeiten")
+        self.container_1_settings.configure(text=config.get("c1", "name"))
+        self.container_2_settings.configure(text=config.get("c2", "name"))
+        self.container_3_settings.configure(text=config.get("c3", "name"))
