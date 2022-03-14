@@ -3,59 +3,54 @@
 import customtkinter
 from tkinter import Label, Frame, CENTER, LEFT, RIGHT
 from PIL import Image, ImageTk
-from config import *
-from ui_functions import UiFunc
+from config.config import *
+from ui.ui_functions import UiFunc
 from functions import openTopLevel
 
 class InitializeMainTkWindow:
     def __init__(self, master):
         #region MAIN SETTINGS AND BACKGROUND
+        height = WINDOW_HEIGHT
+        width = WINDOW_WIDTH
         master.title("Müsli-Master")
-        master.geometry("800x480") #Define the size of the tkinter frame
+        master.geometry(f"{width}x{height}") #Define the size of the tkinter frame
         master.attributes("-fullscreen", False)
         #master.attributes('-alpha',0.85) # transparent
-        self.bg = Label(master, bg = BACKGROUND_COLOR, width = 800, height = 480) # background color
+        self.bg = Label(master, bg = WINDOW_BG_COLOR, width = 800, height = 480) # background color
         self.bg.place(x=0, y =0)
+        master.resizable(False, False)
         #endregion
  
         #region LOADING IN
-        InitializeMainTkWindow.loadTopBar(self, master)
+        self.loadTopBar(master)
 
-        InitializeMainTkWindow.loadContainerLeft(self, master)
+        self.loadContainerLeft(master)
 
-        InitializeMainTkWindow.loadContainerMiddle(self, master)
+        self.loadContainerMiddle(master)
 
-        InitializeMainTkWindow.loadContainerRight(self, master)
+        self.loadContainerRight(master)
 
-        InitializeMainTkWindow.loadPortionSize(self, master)
+        self.loadPortionSize(master)
 
-        InitializeMainTkWindow.loadNutritionalValues(self, master)
+        self.loadNutritionalValues(master)
 
-        InitializeMainTkWindow.loadBottomBar(self, master)        
+        self.loadBottomBar(master)        
 
-        UiFunc.updateContainerValues(self)
-
-        UiFunc.updatePortionValues(self)
-        UiFunc.updatePortionSizesValues(self)
-        UiFunc.updateResultSize(self)
+        self.Update()
         
-        UiFunc.calculateResultValues(self)
-        UiFunc.updateCheckboxValues(self)
-        #UiFunc.writeConfigFile("c1", "kcal", "12341")
-
         #endregion /LOADING IN
 
     def loadTopBar(self, master):
         self.top_frame = Frame(master, 
                                height=40, 
                                width=800, 
-                               bg=BACKGROUND_TOP_COLOR_BORDERS)
+                               bg=TOP_BORDER_BG_COLOR)
         self.top_frame.place(x=BORDER_TOP_X,y=BORDER_TOP_Y)
 
         Frame(master,
               height=3,
               width=800,
-              bg=BACKGROUND_BORDER_COLOR).place(x=0, y=40)
+              bg=BORDER_ACCENTS_BG_COLOR).place(x=0, y=40)
 
         # title name
         # self.top_name = Label(self.top_frame, 
@@ -71,20 +66,20 @@ class InitializeMainTkWindow:
         #multiple image size by zoom
         pixels_x, pixels_y = tuple([int(zoom * x)  for x in image.size])
         img = ImageTk.PhotoImage(image.resize((pixels_x, pixels_y))) 
-        label = Label(self.top_frame, image=img, bg=BACKGROUND_TOP_COLOR_BORDERS)
+        label = Label(self.top_frame, image=img, bg=TOP_BORDER_BG_COLOR)
         label.image = img
         label.place(x=0, y=-15)
 
 
 
         self.button_port_settings = customtkinter.CTkButton(master=self.top_frame, 
-                                           text="Portionseinstellungen", 
+                                           text="Einstellungen", 
                                            text_color="white", 
-                                           bg_color=BACKGROUND_TOP_COLOR_BORDERS,
-                                           fg_color=BACKGROUND_TOP_COLOR_BORDERS,
-                                           hover_color=BUTTON_HOVER_COLOR_BORDERS,
+                                           bg_color=TOP_BORDER_BG_COLOR,
+                                           fg_color=TOP_BORDER_BG_COLOR,
+                                           hover_color=BUTTON_HOVER_BG_COLOR,
                                            command=lambda: openTopLevel(self))
-        self.button_port_settings.place(x=706, y=20, anchor=CENTER)
+        self.button_port_settings.place(x=722, y=20, anchor=CENTER)
 
     def loadContainerLeft(self, master):
         InitializeMainTkWindow.create_container_shadow(master, 
@@ -112,7 +107,7 @@ class InitializeMainTkWindow:
                                                            width=self.container_1.winfo_reqwidth(),
                                                            height=2,
                                                            corner_radius=10,
-                                                           fg_color=MATERIALS_STANDARD_BORDER)
+                                                           fg_color=ACCENTS_BG_COLOR)
         self.border_container_1_1.place(x=30, y=40)
 
         self.container_1_name = Label(self.container_1,
@@ -127,10 +122,10 @@ class InitializeMainTkWindow:
         self.container_1_checkbox = customtkinter.CTkButton(self.container_1,
                                                             width=25,
                                                             height=25,
-                                                            fg_color=CHECKBOX_COLOR,
-                                                            bg_color=CHECKBOX_COLOR,
+                                                            fg_color=CHECKBOX_BG_COLOR,
+                                                            bg_color=CHECKBOX_BG_COLOR,
                                                             hover_color=None,
-                                                            border_color=CHECKBOX_COLOR,
+                                                            border_color=CHECKBOX_BG_COLOR,
                                                             corner_radius=7,
                                                             text="")
         self.container_1_checkbox.place(x=118 + 30, y=8)
@@ -148,7 +143,7 @@ class InitializeMainTkWindow:
                                                            width=self.container_1.winfo_reqwidth(),
                                                            height=2,
                                                            corner_radius=10,
-                                                           fg_color=MATERIALS_STANDARD_BORDER)
+                                                           fg_color=ACCENTS_BG_COLOR)
         self.border_container_1_2.place(x=30, y=79)
 
         self.container_1_fat = Label(self.container_1, 
@@ -162,7 +157,7 @@ class InitializeMainTkWindow:
                                                            width=self.container_1.winfo_reqwidth(),
                                                            height=2,
                                                            corner_radius=10,
-                                                           fg_color=MATERIALS_STANDARD_BORDER)
+                                                           fg_color=ACCENTS_BG_COLOR)
         self.border_container_1_3.place(x=30, y=118)
 
         self.container_1_sugar = Label(self.container_1, 
@@ -176,7 +171,7 @@ class InitializeMainTkWindow:
                                                            width=self.container_1.winfo_reqwidth(),
                                                            height=2,
                                                            corner_radius=10,
-                                                           fg_color=MATERIALS_STANDARD_BORDER)
+                                                           fg_color=ACCENTS_BG_COLOR)
         self.border_container_1_4.place(x=30, y=157)
 
         self.container_1_portion_amount = Label(self.container_1, 
@@ -200,11 +195,11 @@ class InitializeMainTkWindow:
                                            height=200,
                                            width=35,
                                            border_width=2,
-                                           border_color=BACKGROUND_COLOR_BUTTON,
+                                           border_color=BUTTON_BG_COLOR,
                                            corner_radius=3,
                                            text_font=(TEXT_FONT, TITLE_FONTSIZE + 1),
-                                           fg_color=BACKGROUND_COLOR_BUTTON,
-                                           hover_color=BUTTON_HOVER_COLOR_BORDERS,
+                                           fg_color=BUTTON_BG_COLOR,
+                                           hover_color=BUTTON_HOVER_BG_COLOR,
                                            command=lambda: UiFunc.decreasePortionAmount(self, 1))
         self.button_container_1_dec.place(x=0, y=0)
 
@@ -215,11 +210,11 @@ class InitializeMainTkWindow:
                                            height=200,
                                            width=35,
                                            border_width=2,
-                                           border_color=BACKGROUND_COLOR_BUTTON,
+                                           border_color=BUTTON_BG_COLOR,
                                            corner_radius=3,
                                            text_font=(TEXT_FONT, TITLE_FONTSIZE + 1),                                          
-                                           fg_color=BACKGROUND_COLOR_BUTTON,
-                                           hover_color=BUTTON_HOVER_COLOR_BORDERS,
+                                           fg_color=BUTTON_BG_COLOR,
+                                           hover_color=BUTTON_HOVER_BG_COLOR,
                                            command=lambda: UiFunc.increasePortionAmount(self, 1))
         self.button_container_1_inc.place(x=185, y=0)
 
@@ -244,7 +239,7 @@ class InitializeMainTkWindow:
                                                            width=self.container_2.winfo_reqwidth(),
                                                            height=2,
                                                            corner_radius=10,
-                                                           fg_color=MATERIALS_STANDARD_BORDER)
+                                                           fg_color=ACCENTS_BG_COLOR)
         self.border_container_2_1.place(x=30, y=40)
 
         self.container_2_name = Label(self.container_2,
@@ -259,10 +254,10 @@ class InitializeMainTkWindow:
         self.container_2_checkbox = customtkinter.CTkButton(self.container_2,
                                                             width=25,
                                                             height=25,
-                                                            fg_color=CHECKBOX_COLOR,
-                                                            bg_color=CHECKBOX_COLOR,
+                                                            fg_color=CHECKBOX_BG_COLOR,
+                                                            bg_color=CHECKBOX_BG_COLOR,
                                                             hover_color=None,
-                                                            border_color=CHECKBOX_COLOR,
+                                                            border_color=CHECKBOX_BG_COLOR,
                                                             corner_radius=7,
                                                             text="")
         self.container_2_checkbox.place(x=118 + 30, y=8)
@@ -280,7 +275,7 @@ class InitializeMainTkWindow:
                                                            width=self.container_2.winfo_reqwidth(),
                                                            height=2,
                                                            corner_radius=10,
-                                                           fg_color=MATERIALS_STANDARD_BORDER)
+                                                           fg_color=ACCENTS_BG_COLOR)
         self.border_container_2_2.place(x=30, y=79)
 
         self.container_2_fat = Label(self.container_2, 
@@ -294,7 +289,7 @@ class InitializeMainTkWindow:
                                                            width=self.container_2.winfo_reqwidth(),
                                                            height=2,
                                                            corner_radius=10,
-                                                           fg_color=MATERIALS_STANDARD_BORDER)
+                                                           fg_color=ACCENTS_BG_COLOR)
         self.border_container_2_3.place(x=30, y=118)
 
         self.container_2_sugar = Label(self.container_2, 
@@ -308,7 +303,7 @@ class InitializeMainTkWindow:
                                                            width=self.container_2.winfo_reqwidth(),
                                                            height=2,
                                                            corner_radius=10,
-                                                           fg_color=MATERIALS_STANDARD_BORDER)
+                                                           fg_color=ACCENTS_BG_COLOR)
         self.border_container_2_4.place(x=30, y=157)
 
         self.container_2_portion_amount = Label(self.container_2, 
@@ -332,11 +327,11 @@ class InitializeMainTkWindow:
                                            height=200,
                                            width=35,
                                            border_width=2,
-                                           border_color=BACKGROUND_COLOR_BUTTON,
+                                           border_color=BUTTON_BG_COLOR,
                                            corner_radius=3,
                                            text_font=(TEXT_FONT, TITLE_FONTSIZE + 1),
-                                           fg_color=BACKGROUND_COLOR_BUTTON,
-                                           hover_color=BUTTON_HOVER_COLOR_BORDERS,
+                                           fg_color=BUTTON_BG_COLOR,
+                                           hover_color=BUTTON_HOVER_BG_COLOR,
                                            command=lambda: UiFunc.decreasePortionAmount(self, 2))
         self.button_container_2_dec.place(x=0, y=0)
 
@@ -347,11 +342,11 @@ class InitializeMainTkWindow:
                                            height=200,
                                            width=35,
                                            border_width=2,
-                                           border_color=BACKGROUND_COLOR_BUTTON,
+                                           border_color=BUTTON_BG_COLOR,
                                            corner_radius=3,
                                            text_font=(TEXT_FONT, TITLE_FONTSIZE + 1),
-                                           fg_color=BACKGROUND_COLOR_BUTTON,
-                                           hover_color=BUTTON_HOVER_COLOR_BORDERS,
+                                           fg_color=BUTTON_BG_COLOR,
+                                           hover_color=BUTTON_HOVER_BG_COLOR,
                                            command=lambda: UiFunc.increasePortionAmount(self, 2))
         self.button_container_2_inc.place(x=185, y=0)
 
@@ -375,7 +370,7 @@ class InitializeMainTkWindow:
                                                            width=self.container_3.winfo_reqwidth(),
                                                            height=2,
                                                            corner_radius=10,
-                                                           fg_color=MATERIALS_STANDARD_BORDER)
+                                                           fg_color=ACCENTS_BG_COLOR)
         self.border_container_3_1.place(x=30, y=40)
 
         self.container_3_name = Label(self.container_3,
@@ -390,10 +385,10 @@ class InitializeMainTkWindow:
         self.container_3_checkbox = customtkinter.CTkButton(self.container_3,
                                                             width=25,
                                                             height=25,
-                                                            fg_color=CHECKBOX_COLOR,
-                                                            bg_color=CHECKBOX_COLOR,
+                                                            fg_color=CHECKBOX_BG_COLOR,
+                                                            bg_color=CHECKBOX_BG_COLOR,
                                                             hover_color=None,
-                                                            border_color=CHECKBOX_COLOR,
+                                                            border_color=CHECKBOX_BG_COLOR,
                                                             corner_radius=7,
                                                             text="")
         self.container_3_checkbox.place(x=118 + 30, y=8)
@@ -410,7 +405,7 @@ class InitializeMainTkWindow:
                                                            width=self.container_3.winfo_reqwidth(),
                                                            height=2,
                                                            corner_radius=10,
-                                                           fg_color=MATERIALS_STANDARD_BORDER)
+                                                           fg_color=ACCENTS_BG_COLOR)
         self.border_container_3_2.place(x=30, y=79)
 
         self.container_3_fat = Label(self.container_3, 
@@ -424,7 +419,7 @@ class InitializeMainTkWindow:
                                                            width=self.container_3.winfo_reqwidth(),
                                                            height=2,
                                                            corner_radius=10,
-                                                           fg_color=MATERIALS_STANDARD_BORDER)
+                                                           fg_color=ACCENTS_BG_COLOR)
         self.border_container_3_3.place(x=30, y=118)
 
         self.container_3_sugar = Label(self.container_3, 
@@ -438,7 +433,7 @@ class InitializeMainTkWindow:
                                                            width=self.container_3.winfo_reqwidth(),
                                                            height=2,
                                                            corner_radius=10,
-                                                           fg_color=MATERIALS_STANDARD_BORDER)
+                                                           fg_color=ACCENTS_BG_COLOR)
         self.border_container_3_4.place(x=30, y=157)
 
         self.container_3_portion_amount = Label(self.container_3, 
@@ -462,11 +457,11 @@ class InitializeMainTkWindow:
                                            height=200,
                                            width=35,
                                            border_width=2,
-                                           border_color=BACKGROUND_COLOR_BUTTON,
+                                           border_color=BUTTON_BG_COLOR,
                                            corner_radius=3,
                                            text_font=(TEXT_FONT, TITLE_FONTSIZE + 1),
-                                           fg_color=BACKGROUND_COLOR_BUTTON,
-                                           hover_color=BUTTON_HOVER_COLOR_BORDERS,
+                                           fg_color=BUTTON_BG_COLOR,
+                                           hover_color=BUTTON_HOVER_BG_COLOR,
                                            command=lambda: UiFunc.decreasePortionAmount(self, 3))
         self.button_container_3_dec.place(x=0, y=0)
 
@@ -477,11 +472,11 @@ class InitializeMainTkWindow:
                                            height=200,
                                            width=35,
                                            border_width=2,
-                                           border_color=BACKGROUND_COLOR_BUTTON,
+                                           border_color=BUTTON_BG_COLOR,
                                            corner_radius=3,
                                            text_font=(TEXT_FONT, TITLE_FONTSIZE + 1),
-                                           fg_color=BACKGROUND_COLOR_BUTTON,
-                                           hover_color=BUTTON_HOVER_COLOR_BORDERS,
+                                           fg_color=BUTTON_BG_COLOR,
+                                           hover_color=BUTTON_HOVER_BG_COLOR,
                                            command=lambda: UiFunc.increasePortionAmount(self, 3))
         self.button_container_3_inc.place(x=185, y=0)
 
@@ -505,7 +500,7 @@ class InitializeMainTkWindow:
                                                            width=self.container_portion.winfo_reqwidth(),
                                                            height=2,
                                                            corner_radius=10,
-                                                           fg_color=MATERIALS_STANDARD_BORDER)
+                                                           fg_color=ACCENTS_BG_COLOR)
         self.border_1_container_portion_horizontal.place(x=0, y=40)
 
         self.container_portion_name = Label(self.container_portion, 
@@ -519,10 +514,10 @@ class InitializeMainTkWindow:
         self.button_portion_1 = customtkinter.CTkButton(master=self.container_portion, 
                                                         text="x Schaufeln", 
                                                         width=104,
-                                                        fg_color=BACKGROUND_COLOR_BUTTON,
+                                                        fg_color=BUTTON_BG_COLOR,
                                                         text_color="white",
                                                         text_font=(TEXT_FONT, SMALL_FONTSIZE + 1),
-                                                        hover_color=BUTTON_HOVER_COLOR_BORDERS,
+                                                        hover_color=BUTTON_HOVER_BG_COLOR,
                                                         command=lambda: UiFunc.portionButtonSwitch(self, self.button_portion_1, 0))
         self.button_portion_1.place(x=3, y=46)
 
@@ -531,16 +526,16 @@ class InitializeMainTkWindow:
                                                                  width=2,
                                                                  height=self.container_portion.winfo_reqheight() - 42,
                                                                  corner_radius=10,
-                                                                 fg_color=MATERIALS_STANDARD_BORDER)
+                                                                 fg_color=ACCENTS_BG_COLOR)
         self.border_2_container_portion_vertical.place(x=110, y=42)
 
         self.button_portion_2 = customtkinter.CTkButton(master=self.container_portion, 
                                                         text="x Schaufeln", 
                                                         width=104,
-                                                        fg_color=BACKGROUND_COLOR_BUTTON,
+                                                        fg_color=BUTTON_BG_COLOR,
                                                         text_color="white",
                                                         text_font=(TEXT_FONT, SMALL_FONTSIZE + 1),
-                                                        hover_color=BUTTON_HOVER_COLOR_BORDERS,
+                                                        hover_color=BUTTON_HOVER_BG_COLOR,
                                                         command=lambda: UiFunc.portionButtonSwitch(self, self.button_portion_2, 1))
         self.button_portion_2.place(x=118, y=46)
 
@@ -549,17 +544,17 @@ class InitializeMainTkWindow:
                                                                  width=2,
                                                                  height=self.container_portion.winfo_reqheight() - 42,
                                                                  corner_radius=10,
-                                                                 fg_color=MATERIALS_STANDARD_BORDER)
+                                                                 fg_color=ACCENTS_BG_COLOR)
         self.border_3_container_portion_vertical.place(x=229, y=42)
 
         
         self.button_portion_3 = customtkinter.CTkButton(master=self.container_portion, 
                                                         text="xx Schaufeln", 
                                                         width=104,
-                                                        fg_color=BACKGROUND_COLOR_BUTTON,
+                                                        fg_color=BUTTON_BG_COLOR,
                                                         text_color="white",
                                                         text_font=(TEXT_FONT, SMALL_FONTSIZE + 1),
-                                                        hover_color=BUTTON_HOVER_COLOR_BORDERS,
+                                                        hover_color=BUTTON_HOVER_BG_COLOR,
                                                         command= lambda: UiFunc.portionButtonSwitch(self, self.button_portion_3, 2))
         self.button_portion_3.place(x=234, y=46)
 
@@ -582,7 +577,7 @@ class InitializeMainTkWindow:
                                                            width=self.container_portion.winfo_reqwidth(),
                                                            height=2,
                                                            corner_radius=10,
-                                                           fg_color=MATERIALS_STANDARD_BORDER)
+                                                           fg_color=ACCENTS_BG_COLOR)
         self.border_1_container_portion_nutritional_values_horizontal.place(x=0, y=40)
 
 
@@ -606,7 +601,7 @@ class InitializeMainTkWindow:
                                                                  width=2,
                                                                  height=self.container_portion_nutritional_values.winfo_reqheight(),
                                                                  corner_radius=10,
-                                                                 fg_color=MATERIALS_STANDARD_BORDER)
+                                                                 fg_color=ACCENTS_BG_COLOR)
         self.border_2_container_portion_nutritional_values_vertical.place(x=110, y=42)
         
 
@@ -622,7 +617,7 @@ class InitializeMainTkWindow:
                                                                  width=2,
                                                                  height=self.container_portion_nutritional_values.winfo_reqheight(),
                                                                  corner_radius=10,
-                                                                 fg_color=MATERIALS_STANDARD_BORDER)
+                                                                 fg_color=ACCENTS_BG_COLOR)
         self.border_3_container_portion_nutritional_values_vertical.place(x=229, y=42)
 
 
@@ -639,9 +634,9 @@ class InitializeMainTkWindow:
                                            width=200, 
                                            height=35,
                                            text_color="white", 
-                                           fg_color=BACKGROUND_COLOR_BUTTON,
-                                           bg_color=BACKGROUND_COLOR,
-                                           hover_color=BUTTON_HOVER_COLOR_BORDERS,
+                                           fg_color=BUTTON_BG_COLOR,
+                                           bg_color=WINDOW_BG_COLOR,
+                                           hover_color=BUTTON_HOVER_BG_COLOR,
                                            text_font=(TEXT_FONT, TITLE_FONTSIZE), 
                                            command=lambda: InitializeMainTkWindow.openServeDialog(self))
         self.button_start.place(x=400, y=412, anchor=CENTER)
@@ -649,18 +644,18 @@ class InitializeMainTkWindow:
         self.bot_frame = Frame(master, 
                                height=25, 
                                width=800, 
-                               bg=BACKGROUND_BOTTOM_COLOR_BORDERS)
+                               bg=BOTTOM_BORDER_BG_COLOR)
         self.bot_frame.place(x=BORDER_BOT_X,y=BORDER_BOT_Y)
 
         Frame(master,
             height=3,
             width=800,
-            bg=BACKGROUND_BORDER_COLOR).place(x=0, y=452)
+            bg=BORDER_ACCENTS_BG_COLOR).place(x=0, y=452)
 
 
         self.bot_date = Label(self.bot_frame, 
                               text="12:20 | 15.02.2022",
-                              bg=BACKGROUND_BOTTOM_COLOR_BORDERS,  
+                              bg=BOTTOM_BORDER_BG_COLOR,  
                               fg=TEXT_BORDER_COLOR,
                               justify=LEFT,
                               anchor="w",
@@ -672,7 +667,7 @@ class InitializeMainTkWindow:
 
         self.bot_footer = Label(self.bot_frame, 
                               text="S. Dolgow | M. Nicolaisen © 2022",
-                              bg=BACKGROUND_BOTTOM_COLOR_BORDERS,  
+                              bg=BOTTOM_BORDER_BG_COLOR,  
                               fg=TEXT_BORDER_COLOR,
                             justify=RIGHT,
                               anchor="e",
@@ -690,3 +685,15 @@ class InitializeMainTkWindow:
     def openServeDialog(self):
         customtkinter.CTkDialog(text="Wollen Sie die Portion Servieren?")
         if DEBUG: print("opening serve dialog")
+
+
+
+    def Update(self):
+        UiFunc.updateContainerValues(self)
+
+        UiFunc.updatePortionValues(self)
+        UiFunc.updatePortionSizesValues(self)
+        UiFunc.updateResultSize(self)
+        
+        UiFunc.calculateResultValues(self)
+        UiFunc.updateCheckboxValues(self)

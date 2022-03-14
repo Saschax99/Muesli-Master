@@ -5,7 +5,7 @@ from .customtkinter_tk import CTk
 from .customtkinter_frame import CTkFrame
 from .appearance_mode_tracker import AppearanceModeTracker
 from .customtkinter_color_manager import CTkColorManager
-from config import TEXT_FONT, STANDARD_FONTSIZE
+from config.config import TEXT_FONT, STANDARD_FONTSIZE
 
 class CTkButton(tkinter.Frame):
     """ tkinter custom button with border, rounded corners and hover effect """

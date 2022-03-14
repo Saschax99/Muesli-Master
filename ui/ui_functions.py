@@ -1,11 +1,10 @@
 import configparser
-from config import *
+from config.config import *
 from datetime import datetime
 import time
 import threading
 import sys
-import os
-import csv
+from loggingsystem import writeLog
 
 class UiFunc:
     '''All User Interface functions'''
@@ -14,16 +13,16 @@ class UiFunc:
     def portionButtonSwitch(self, instance, count):
         '''setup portion size with switches on main window'''
 
-        if self.button_portion_1.fg_color == BUTTON_HOVER_COLOR_BORDERS:
-            self.button_portion_1.configure(fg_color = BACKGROUND_COLOR_BUTTON)
+        if self.button_portion_1.fg_color == BUTTON_HOVER_BG_COLOR:
+            self.button_portion_1.configure(fg_color = BUTTON_BG_COLOR)
 
-        if self.button_portion_2.fg_color == BUTTON_HOVER_COLOR_BORDERS:
-            self.button_portion_2.configure(fg_color = BACKGROUND_COLOR_BUTTON)
+        if self.button_portion_2.fg_color == BUTTON_HOVER_BG_COLOR:
+            self.button_portion_2.configure(fg_color = BUTTON_BG_COLOR)
 
-        if self.button_portion_3.fg_color == BUTTON_HOVER_COLOR_BORDERS:
-            self.button_portion_3.configure(fg_color = BACKGROUND_COLOR_BUTTON)
+        if self.button_portion_3.fg_color == BUTTON_HOVER_BG_COLOR:
+            self.button_portion_3.configure(fg_color = BUTTON_BG_COLOR)
 
-        instance.configure(fg_color= BUTTON_HOVER_COLOR_BORDERS)
+        instance.configure(fg_color= BUTTON_HOVER_BG_COLOR)
         UiFunc.writeConfigFile(CONFIG_PORTIONS_NAME, "size_var", str(count))
         UiFunc.resetResultValues(self) # reset values when switching
         UiFunc.updateResultSize(self) # update result sizes
@@ -34,13 +33,13 @@ class UiFunc:
 
         value = int(config.get(CONFIG_PORTIONS_NAME, "size_var"))
         if value == 0:
-            self.button_portion_1.configure(fg_color = BUTTON_HOVER_COLOR_BORDERS)
+            self.button_portion_1.configure(fg_color = BUTTON_HOVER_BG_COLOR)
 
         if value == 1:
-            self.button_portion_2.configure(fg_color = BUTTON_HOVER_COLOR_BORDERS)
+            self.button_portion_2.configure(fg_color = BUTTON_HOVER_BG_COLOR)
 
         if value == 2:
-            self.button_portion_3.configure(fg_color = BUTTON_HOVER_COLOR_BORDERS)
+            self.button_portion_3.configure(fg_color = BUTTON_HOVER_BG_COLOR)
 
     def updatePortionSizesValues(self):
         '''update portion size text on startup'''
@@ -143,29 +142,29 @@ class UiFunc:
 
     def disableButton(self, count):
         if count == 1:
-            self.button_container_1_inc.configure(state= "disabled", fg_color=BACKGROUND_COLOR_DISABLED_BUTTON)
-            self.button_container_1_dec.configure(state= "disabled", fg_color=BACKGROUND_COLOR_DISABLED_BUTTON)
+            self.button_container_1_inc.configure(state= "disabled", fg_color=BUTTON_DISABLED_BG_COLOR)
+            self.button_container_1_dec.configure(state= "disabled", fg_color=BUTTON_DISABLED_BG_COLOR)
 
         if count == 2:
-            self.button_container_2_inc.configure(state= "disabled", fg_color=BACKGROUND_COLOR_DISABLED_BUTTON)        
-            self.button_container_2_dec.configure(state= "disabled", fg_color=BACKGROUND_COLOR_DISABLED_BUTTON)
+            self.button_container_2_inc.configure(state= "disabled", fg_color=BUTTON_DISABLED_BG_COLOR)        
+            self.button_container_2_dec.configure(state= "disabled", fg_color=BUTTON_DISABLED_BG_COLOR)
 
         if count == 3:
-            self.button_container_3_inc.configure(state= "disabled", fg_color=BACKGROUND_COLOR_DISABLED_BUTTON)
-            self.button_container_3_dec.configure(state= "disabled", fg_color=BACKGROUND_COLOR_DISABLED_BUTTON)
+            self.button_container_3_inc.configure(state= "disabled", fg_color=BUTTON_DISABLED_BG_COLOR)
+            self.button_container_3_dec.configure(state= "disabled", fg_color=BUTTON_DISABLED_BG_COLOR)
 
     def enableButton(self, count):
         if count == 1:
-            self.button_container_1_inc.configure(state= "normal", fg_color=BACKGROUND_COLOR_BUTTON)
-            self.button_container_1_dec.configure(state= "normal", fg_color=BACKGROUND_COLOR_BUTTON)
+            self.button_container_1_inc.configure(state= "normal", fg_color=BUTTON_BG_COLOR)
+            self.button_container_1_dec.configure(state= "normal", fg_color=BUTTON_BG_COLOR)
 
         if count == 2:
-            self.button_container_2_inc.configure(state= "normal", fg_color=BACKGROUND_COLOR_BUTTON)  
-            self.button_container_2_dec.configure(state= "normal", fg_color=BACKGROUND_COLOR_BUTTON)      
+            self.button_container_2_inc.configure(state= "normal", fg_color=BUTTON_BG_COLOR)  
+            self.button_container_2_dec.configure(state= "normal", fg_color=BUTTON_BG_COLOR)      
 
         if count == 3:
-            self.button_container_3_inc.configure(state= "normal", fg_color=BACKGROUND_COLOR_BUTTON)
-            self.button_container_3_dec.configure(state= "normal", fg_color=BACKGROUND_COLOR_BUTTON)
+            self.button_container_3_inc.configure(state= "normal", fg_color=BUTTON_BG_COLOR)
+            self.button_container_3_dec.configure(state= "normal", fg_color=BUTTON_BG_COLOR)
     #endregion portions size   
  
     def refreshDateTime(self):
@@ -244,7 +243,7 @@ class UiFunc:
             UiFunc.calculateResultValues(self)
 
         else:
-            instance.configure(fg_color=CHECKBOX_COLOR)
+            instance.configure(fg_color=CHECKBOX_BG_COLOR)
             UiFunc.writeConfigFile("c" + str(count), "supply_active", str(True))
             UiFunc.enableButton(self, count)
 
@@ -253,7 +252,7 @@ class UiFunc:
 
         for i in range(1, 4):
             if config.get("c" + str(i), "supply_active") == str(True):
-                exec('self.container_' + str(i) + '_checkbox.configure(fg_color=CHECKBOX_COLOR)')
+                exec('self.container_' + str(i) + '_checkbox.configure(fg_color=CHECKBOX_BG_COLOR)')
             else:
                 exec('self.container_' + str(i) + '_checkbox.configure(fg_color="white")')
             
@@ -283,19 +282,19 @@ class UiFunc:
         c3_sugar = float(config.get("c3", "sugar"))
 
         kcal_result = round(((c1_count * (c1_kcal))
-         + (c2_count * (c2_kcal))
-         + (c3_count * (c3_kcal)))
-         / CALCULATION_RATIO, 1)
+                            + (c2_count * (c2_kcal))
+                            + (c3_count * (c3_kcal)))
+                            / CALCULATION_RATIO, 1)
 
         fat_result = round(((c1_count * (c1_fat))
-         + (c2_count * (c2_fat))
-         + (c3_count * (c3_fat)))
-         / CALCULATION_RATIO, 1)
+                            + (c2_count * (c2_fat))
+                            + (c3_count * (c3_fat)))
+                            / CALCULATION_RATIO, 1)
 
         sugar_result = round(((c1_count * (c1_sugar))
-         + (c2_count * (c2_sugar))
-         + (c3_count * (c3_sugar))) 
-         / CALCULATION_RATIO, 1)
+                            + (c2_count * (c2_sugar))
+                            + (c3_count * (c3_sugar))) 
+                            / CALCULATION_RATIO, 1)
 
         UiFunc.writeConfigFile("portionsettings", "kcal", str(kcal_result))
         UiFunc.writeConfigFile("portionsettings", "fat", str(fat_result))
@@ -313,9 +312,9 @@ class UiFunc:
     def serve():
         if DEBUG: print("Serving...")
 
-        amount = int(config.get("portionsettings", "c1_amount"))
-        + int(config.get("portionsettings", "c2_amount"))
-        + int(config.get("portionsettings", "c3_amount"))
+        amount = (int(config.get("portionsettings", "c1_amount"))
+                + int(config.get("portionsettings", "c2_amount"))
+                + int(config.get("portionsettings", "c3_amount")))
 
         if amount <= 0: # if 0 quit
             print("no amount set")
@@ -328,28 +327,24 @@ class UiFunc:
         with open(LOGSYSTEM_PATH, 'r') as csv: # get number of entries
             lines = csv.readlines()
 
-        UiFunc.writeLog(len(lines), amount, kcal, fat, sugar)
-
-    def writeLog(row1, row2, row3, row4, row5):
-        '''write or create csv file'''
-
-        with open(LOGSYSTEM_PATH, 'a', newline='', encoding='utf-8') as f:
-            writer = csv.writer(f, delimiter=';')
-            writer.writerow([row1, row2, row3, row4, row5])
-
-    def logging():
-        '''logging system | create'''
-
-        if not os.path.isfile(LOGSYSTEM_PATH):
-            if DEBUG: print("creating new csv file..")
-            UiFunc.writeLog("Nr.", "Portionsmenge", "Kcal", "Fett", "Zucker")
+        now = datetime.now()
+        dt_string = now.strftime("%H:%M:%S | %d.%m.%Y")
+        writeLog(len(lines), amount, kcal, fat, sugar, dt_string)
 
     #endregion result calculation
 
 
-    def closeTopLevel(self):
+    def closeTopLevel(self, instance = None):
         #UiFunc.CheckboxStartup(self)
-        self.master.destroy()
+        if not instance == None: # if instance | from ui settings to main transition
+            UiFunc.updateContainerValues(instance)
+            UiFunc.updatePortionValues(instance)
+            UiFunc.updatePortionSizesValues(instance)
+            UiFunc.updateResultSize(instance)
+            UiFunc.calculateResultValues(instance)
+            #UiFunc.updateCheckboxValues(instance)
+
+        self.top.destroy()
         
     #endregion TOPLEVEL
 

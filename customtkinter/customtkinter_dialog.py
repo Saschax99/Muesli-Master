@@ -3,8 +3,8 @@ from customtkinter.customtkinter_label import CTkLabel
 from customtkinter.customtkinter_button import CTkButton
 from customtkinter.customtkinter_color_manager import CTkColorManager
 
-from config import BUTTON_HOVER_COLOR_BORDERS, BACKGROUND_COLOR_BUTTON, TEXT_FONT, STANDARD_FONTSIZE, BACKGROUND_COLOR
-from ui_functions import UiFunc
+from config.config import BUTTON_HOVER_BG_COLOR, BUTTON_BG_COLOR, TEXT_FONT, STANDARD_FONTSIZE, WINDOW_BG_COLOR
+from ui.ui_functions import UiFunc
 
 class CTkDialog:
     def __init__(self,
@@ -13,8 +13,8 @@ class CTkDialog:
                  text="CTkDialog",
                  declinebutton_text="Nein",
                  acceptbutton_text="Ja",
-                 fg_color=BACKGROUND_COLOR_BUTTON,
-                 hover_color=BUTTON_HOVER_COLOR_BORDERS):
+                 fg_color=BUTTON_BG_COLOR,
+                 hover_color=BUTTON_HOVER_BG_COLOR):
         self.master = master
 
         self.user_input = None
@@ -36,7 +36,7 @@ class CTkDialog:
 
         self.button_frame = tkinter.Frame(master=self.top,
                                                     width=self.width,
-                                                    background=BACKGROUND_COLOR,
+                                                    background=WINDOW_BG_COLOR,
                                                     height=125)
         self.button_frame.place(x=0, y=0)
 
@@ -53,7 +53,7 @@ class CTkDialog:
                                    width=100,
                                    command=self.ok_event,
                                    fg_color=self.fg_color,
-                                   bg_color=BACKGROUND_COLOR,
+                                   bg_color=WINDOW_BG_COLOR,
                                    text_color="white",
                                    hover_color=self.hover_color)
         self.ok_button.place(relx=0.28, rely=0.75, anchor=tkinter.CENTER)
@@ -63,7 +63,7 @@ class CTkDialog:
                                        width=100,
                                        command=self.cancel_event,
                                        fg_color=self.fg_color,
-                                       bg_color=BACKGROUND_COLOR,
+                                       bg_color=WINDOW_BG_COLOR,
                                        text_color="white",
                                        hover_color=self.hover_color)
         self.cancel_button.place(relx=0.72, rely=0.75, anchor=tkinter.CENTER)
