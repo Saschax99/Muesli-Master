@@ -131,9 +131,9 @@ class InputLevel:
 
 
         self.container_kcal = Label(self.container_input, # NAME OF ENTRY
-                                      text="Kcal",
+                                      text="Kcal/100g",
                                       bg="white", 
-                                      width=5, 
+                                      width=10, 
                                       justify=LEFT,
                                       anchor="w",
                                       font=(TEXT_FONT, SMALL_FONTSIZE)) 
@@ -158,9 +158,9 @@ class InputLevel:
 
 
         self.container_fat = Label(self.container_input, # NAME OF ENTRY
-                                      text="Fett",
+                                      text="Fett/100g",
                                       bg="white", 
-                                      width=5, 
+                                      width=10, 
                                       justify=LEFT,
                                       anchor="w",
                                       font=(TEXT_FONT, SMALL_FONTSIZE)) 
@@ -186,9 +186,9 @@ class InputLevel:
 
 
         self.container_sugar = Label(self.container_input, # NAME OF ENTRY
-                                      text="Zucker",
+                                      text="Zucker/100g",
                                       bg="white", 
-                                      width=5, 
+                                      width=10, 
                                       justify=LEFT,
                                       anchor="w",
                                       font=(TEXT_FONT, SMALL_FONTSIZE)) 

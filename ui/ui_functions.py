@@ -247,18 +247,9 @@ class UiFunc:
             UiFunc.writeConfigFile("c" + str(count), "supply_active", str(True))
             UiFunc.enableButton(self, count)
 
-    def updateCheckboxValues(self):
-        '''update checkboxes at startup'''
 
-        for i in range(1, 4):
-            if config.get("c" + str(i), "supply_active") == str(True):
-                exec('self.container_' + str(i) + '_checkbox.configure(fg_color=CHECKBOX_BG_COLOR)')
-            else:
-                exec('self.container_' + str(i) + '_checkbox.configure(fg_color="white")')
-            
-            if config.get("c" + str(i), "supply_active") == str(False): # at startup disable buttons if supply is deactivated
-                UiFunc.resetResultValues(self, i) # not necessary
-                UiFunc.disableButton(self, i)      
+                # UiFunc.resetResultValues(self, i) # not necessary
+                # UiFunc.disableButton(self, i)      
     #endregion checkboxes
 
     #region result calculation

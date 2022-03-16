@@ -112,24 +112,9 @@ class InitializeMainTkWindow:
 
         self.container_1_name = Label(self.container_1,
                                       bg="white", 
-                                      width=10, 
-                                      font=(TEXT_FONT, TITLE_FONTSIZE),
-                                      justify=LEFT,
-                                      anchor="w")
+                                      width=12, 
+                                      font=(TEXT_FONT, TITLE_FONTSIZE))
         self.container_1_name.place(x=35 + 6, y=6) 
-
-
-        self.container_1_checkbox = customtkinter.CTkButton(self.container_1,
-                                                            width=25,
-                                                            height=25,
-                                                            fg_color=CHECKBOX_BG_COLOR,
-                                                            bg_color=CHECKBOX_BG_COLOR,
-                                                            hover_color=None,
-                                                            border_color=CHECKBOX_BG_COLOR,
-                                                            corner_radius=7,
-                                                            text="")
-        self.container_1_checkbox.place(x=118 + 30, y=8)
-        self.container_1_checkbox.configure(command = lambda: UiFunc.switchCheckboxState(self, self.container_1_checkbox, 1))
 
 
         self.container_1_kcal = Label(self.container_1, 
@@ -244,25 +229,9 @@ class InitializeMainTkWindow:
 
         self.container_2_name = Label(self.container_2,
                                       bg="white", 
-                                      width=10, 
-                                      font=(TEXT_FONT, TITLE_FONTSIZE),
-                                      justify=LEFT,
-                                      anchor="w")
+                                      width=12, 
+                                      font=(TEXT_FONT, TITLE_FONTSIZE))
         self.container_2_name.place(x=35 + 6, y=6) 
-
-
-        self.container_2_checkbox = customtkinter.CTkButton(self.container_2,
-                                                            width=25,
-                                                            height=25,
-                                                            fg_color=CHECKBOX_BG_COLOR,
-                                                            bg_color=CHECKBOX_BG_COLOR,
-                                                            hover_color=None,
-                                                            border_color=CHECKBOX_BG_COLOR,
-                                                            corner_radius=7,
-                                                            text="")
-        self.container_2_checkbox.place(x=118 + 30, y=8)
-        self.container_2_checkbox.configure(command = lambda: UiFunc.switchCheckboxState(self, self.container_2_checkbox, 2))
-
 
         self.container_2_kcal = Label(self.container_2, 
                                       text="xxx Kcal/100g",
@@ -375,24 +344,9 @@ class InitializeMainTkWindow:
 
         self.container_3_name = Label(self.container_3,
                                       bg="white", 
-                                      width=10, 
-                                      font=(TEXT_FONT, TITLE_FONTSIZE),
-                                      justify=LEFT,
-                                      anchor="w")
+                                      width=12, 
+                                      font=(TEXT_FONT, TITLE_FONTSIZE))
         self.container_3_name.place(x=35 + 6, y=6) 
-
-
-        self.container_3_checkbox = customtkinter.CTkButton(self.container_3,
-                                                            width=25,
-                                                            height=25,
-                                                            fg_color=CHECKBOX_BG_COLOR,
-                                                            bg_color=CHECKBOX_BG_COLOR,
-                                                            hover_color=None,
-                                                            border_color=CHECKBOX_BG_COLOR,
-                                                            corner_radius=7,
-                                                            text="")
-        self.container_3_checkbox.place(x=118 + 30, y=8)
-        self.container_3_checkbox.configure(command = lambda: UiFunc.switchCheckboxState(self, self.container_3_checkbox, 3))
 
         self.container_3_kcal = Label(self.container_3, 
                                       text="xxx Kcal/100g",
@@ -696,4 +650,3 @@ class InitializeMainTkWindow:
         UiFunc.updateResultSize(self)
         
         UiFunc.calculateResultValues(self)
-        UiFunc.updateCheckboxValues(self)
