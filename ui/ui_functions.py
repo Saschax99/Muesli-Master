@@ -30,9 +30,8 @@ class UiFunc:
         UiFunc.updatePortionShovels(self, var_amount_1, var_amount_2, var_amount_3)
 
     def updatePortionShovels(self, var1, var2, var3):
-        max_size = config.get(CONFIG_PORTIONS_NAME, "max_size")
         cur_size = int(var1) + int(var2) + int(var3)
-        self.container_portion_value.configure(text=str(cur_size) + "/" +str(max_size) + " Schaufeln" + " | " + str(cur_size * GRAMM_PER_PORTION) + " Gramm")
+        self.container_portion_value.configure(text=str(cur_size) + "/" + str(MAX_PORTION_SIZE) + " Schaufeln" + " | " + str(cur_size * GRAMM_PER_PORTION) + " Gramm")
 
 
     def resetResultValues(self, count = 0):
@@ -51,15 +50,13 @@ class UiFunc:
 
     def increasePortionAmount(self, con):
         '''increase amount of containers portion size'''
-
-        por_size = config.get(CONFIG_PORTIONS_NAME, "max_size")
-
+        
         c1_amount = int(config.get(CONFIG_PORTIONS_NAME, "c1_amount"))
         c2_amount = int(config.get(CONFIG_PORTIONS_NAME, "c2_amount"))
         c3_amount = int(config.get(CONFIG_PORTIONS_NAME, "c3_amount"))
         c_all_amount = c1_amount + c2_amount + c3_amount
 
-        if int(c_all_amount) == int(por_size): # if max reached return
+        if int(c_all_amount) == int(MAX_PORTION_SIZE): # if max reached return
             return
 
         if con == 1:
