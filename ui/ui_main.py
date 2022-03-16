@@ -449,6 +449,12 @@ class InitializeMainTkWindow:
                                              corner_radius=4)
         self.container_portion.place(x=CONTAINER_PORTION_X, y=CONTAINER_PORTION_Y)
 
+        self.container_portion_name = Label(self.container_portion, 
+                                      text="Portionsmenge",
+                                      bg="white", 
+                                      width=30, 
+                                      font=(TEXT_FONT, TITLE_FONTSIZE)) 
+        self.container_portion_name.place(x=6, y=6) 
 
         self.border_1_container_portion_horizontal = customtkinter.CTkFrame(master=self.container_portion,
                                                            width=self.container_portion.winfo_reqwidth(),
@@ -457,60 +463,12 @@ class InitializeMainTkWindow:
                                                            fg_color=ACCENTS_BG_COLOR)
         self.border_1_container_portion_horizontal.place(x=0, y=40)
 
-        self.container_portion_name = Label(self.container_portion, 
-                                      text="Portionsgröße",
+        self.container_portion_value = Label(self.container_portion, 
+                                      text="x Schaufeln",
                                       bg="white", 
                                       width=30, 
                                       font=(TEXT_FONT, TITLE_FONTSIZE)) 
-        self.container_portion_name.place(x=0 + 6, y=6) 
-
-
-        self.button_portion_1 = customtkinter.CTkButton(master=self.container_portion, 
-                                                        text="x Schaufeln", 
-                                                        width=104,
-                                                        fg_color=BUTTON_BG_COLOR,
-                                                        text_color="white",
-                                                        text_font=(TEXT_FONT, SMALL_FONTSIZE + 1),
-                                                        hover_color=BUTTON_HOVER_BG_COLOR,
-                                                        command=lambda: UiFunc.portionButtonSwitch(self, self.button_portion_1, 0))
-        self.button_portion_1.place(x=3, y=46)
-
-
-        self.border_2_container_portion_vertical = customtkinter.CTkFrame(master=self.container_portion,
-                                                                 width=2,
-                                                                 height=self.container_portion.winfo_reqheight() - 42,
-                                                                 corner_radius=10,
-                                                                 fg_color=ACCENTS_BG_COLOR)
-        self.border_2_container_portion_vertical.place(x=110, y=42)
-
-        self.button_portion_2 = customtkinter.CTkButton(master=self.container_portion, 
-                                                        text="x Schaufeln", 
-                                                        width=104,
-                                                        fg_color=BUTTON_BG_COLOR,
-                                                        text_color="white",
-                                                        text_font=(TEXT_FONT, SMALL_FONTSIZE + 1),
-                                                        hover_color=BUTTON_HOVER_BG_COLOR,
-                                                        command=lambda: UiFunc.portionButtonSwitch(self, self.button_portion_2, 1))
-        self.button_portion_2.place(x=118, y=46)
-
-      
-        self.border_3_container_portion_vertical = customtkinter.CTkFrame(master=self.container_portion,
-                                                                 width=2,
-                                                                 height=self.container_portion.winfo_reqheight() - 42,
-                                                                 corner_radius=10,
-                                                                 fg_color=ACCENTS_BG_COLOR)
-        self.border_3_container_portion_vertical.place(x=229, y=42)
-
-        
-        self.button_portion_3 = customtkinter.CTkButton(master=self.container_portion, 
-                                                        text="xx Schaufeln", 
-                                                        width=104,
-                                                        fg_color=BUTTON_BG_COLOR,
-                                                        text_color="white",
-                                                        text_font=(TEXT_FONT, SMALL_FONTSIZE + 1),
-                                                        hover_color=BUTTON_HOVER_BG_COLOR,
-                                                        command= lambda: UiFunc.portionButtonSwitch(self, self.button_portion_3, 2))
-        self.button_portion_3.place(x=234, y=46)
+        self.container_portion_value.place(x=6, y=49) 
 
     def loadNutritionalValues(self, master):
         InitializeMainTkWindow.create_container_shadow(master, 
@@ -644,9 +602,5 @@ class InitializeMainTkWindow:
 
     def Update(self):
         UiFunc.updateContainerValues(self)
-
-        UiFunc.updatePortionValues(self)
-        UiFunc.updatePortionSizesValues(self)
         UiFunc.updateResultSize(self)
-        
         UiFunc.calculateResultValues(self)

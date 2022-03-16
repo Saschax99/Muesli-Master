@@ -85,5 +85,6 @@ CONFIG_PORTIONS_NAME = f'portionsettings'
 LOGSYSTEM_PATH = f'logsystem.csv'
 
 CALCULATION_RATIO = 10 / 3
+GRAMM_PER_PORTION = 30
 DEBUG = True
 

@@ -9,67 +9,31 @@ from loggingsystem import writeLog
 class UiFunc:
     '''All User Interface functions'''
     
+        # RESET STATEMENTS
+        # UiFunc.resetResultValues(self) # reset values when switching
+        # UiFunc.updateResultSize(self) # update result sizes
+        # UiFunc.calculateResultValues(self) # update result labels and calc
+
     #region portions size
-    def portionButtonSwitch(self, instance, count):
-        '''setup portion size with switches on main window'''
-
-        if self.button_portion_1.fg_color == BUTTON_HOVER_BG_COLOR:
-            self.button_portion_1.configure(fg_color = BUTTON_BG_COLOR)
-
-        if self.button_portion_2.fg_color == BUTTON_HOVER_BG_COLOR:
-            self.button_portion_2.configure(fg_color = BUTTON_BG_COLOR)
-
-        if self.button_portion_3.fg_color == BUTTON_HOVER_BG_COLOR:
-            self.button_portion_3.configure(fg_color = BUTTON_BG_COLOR)
-
-        instance.configure(fg_color= BUTTON_HOVER_BG_COLOR)
-        UiFunc.writeConfigFile(CONFIG_PORTIONS_NAME, "size_var", str(count))
-        UiFunc.resetResultValues(self) # reset values when switching
-        UiFunc.updateResultSize(self) # update result sizes
-        UiFunc.calculateResultValues(self) # update result labels and calc
-
-    def updatePortionValues(self):
-        '''update portion size button on startup'''
-
-        value = int(config.get(CONFIG_PORTIONS_NAME, "size_var"))
-        if value == 0:
-            self.button_portion_1.configure(fg_color = BUTTON_HOVER_BG_COLOR)
-
-        if value == 1:
-            self.button_portion_2.configure(fg_color = BUTTON_HOVER_BG_COLOR)
-
-        if value == 2:
-            self.button_portion_3.configure(fg_color = BUTTON_HOVER_BG_COLOR)
-
-    def updatePortionSizesValues(self):
-        '''update portion size text on startup'''
-
-        p1 = config.get(CONFIG_PORTIONS_NAME, "portion_size[0]")
-        self.button_portion_1.configure(text=str(p1) +" Schaufeln")   
-        
-        p2 = config.get(CONFIG_PORTIONS_NAME, "portion_size[1]")
-        self.button_portion_2.configure(text=str(p2) +" Schaufeln")     
-        
-        p3 = config.get(CONFIG_PORTIONS_NAME, "portion_size[2]")
-        self.button_portion_3.configure(text=str(p3) +" Schaufeln")
-
     def updateResultSize(self):
         '''update result size of portion'''
 
         var_amount_1 = config.get(CONFIG_PORTIONS_NAME, "c1_amount")
-        var_1 = config.get(CONFIG_PORTIONS_NAME, "size_var")
-        por_size_1 = config.get(CONFIG_PORTIONS_NAME, "portion_size[" + var_1 +"]")
-        self.container_1_portion_amount.configure(text=str(var_amount_1) + "/" + str(por_size_1))
+        self.container_1_portion_amount.configure(text=str(var_amount_1))
 
         var_amount_2 = config.get(CONFIG_PORTIONS_NAME, "c2_amount")
-        var_2 = config.get(CONFIG_PORTIONS_NAME, "size_var")
-        por_size_2 = config.get(CONFIG_PORTIONS_NAME, "portion_size[" + var_2 +"]")
-        self.container_2_portion_amount.configure(text=str(var_amount_2) + "/" + str(por_size_2))
+        self.container_2_portion_amount.configure(text=str(var_amount_2))
 
         var_amount_3 = config.get(CONFIG_PORTIONS_NAME, "c3_amount")
-        var_3 = config.get(CONFIG_PORTIONS_NAME, "size_var")
-        por_size_3 = config.get(CONFIG_PORTIONS_NAME, "portion_size[" + var_3 +"]")
-        self.container_3_portion_amount.configure(text=str(var_amount_3) + "/" + str(por_size_3))
+        self.container_3_portion_amount.configure(text=str(var_amount_3))
+
+        UiFunc.updatePortionShovels(self, var_amount_1, var_amount_2, var_amount_3)
+
+    def updatePortionShovels(self, var1, var2, var3):
+        max_size = config.get(CONFIG_PORTIONS_NAME, "max_size")
+        cur_size = int(var1) + int(var2) + int(var3)
+        self.container_portion_value.configure(text=str(cur_size) + "/" +str(max_size) + " Schaufeln" + " | " + str(cur_size * GRAMM_PER_PORTION) + " Gramm")
+
 
     def resetResultValues(self, count = 0):
         if count == 0: # reset all
@@ -88,8 +52,7 @@ class UiFunc:
     def increasePortionAmount(self, con):
         '''increase amount of containers portion size'''
 
-        var = config.get(CONFIG_PORTIONS_NAME, "size_var")
-        por_size = config.get(CONFIG_PORTIONS_NAME, "portion_size[" + var +"]")
+        por_size = config.get(CONFIG_PORTIONS_NAME, "max_size")
 
         c1_amount = int(config.get(CONFIG_PORTIONS_NAME, "c1_amount"))
         c2_amount = int(config.get(CONFIG_PORTIONS_NAME, "c2_amount"))
@@ -329,8 +292,6 @@ class UiFunc:
         #UiFunc.CheckboxStartup(self)
         if not instance == None: # if instance | from ui settings to main transition
             UiFunc.updateContainerValues(instance)
-            UiFunc.updatePortionValues(instance)
-            UiFunc.updatePortionSizesValues(instance)
             UiFunc.updateResultSize(instance)
             UiFunc.calculateResultValues(instance)
             #UiFunc.updateCheckboxValues(instance)
