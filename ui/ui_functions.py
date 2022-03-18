@@ -5,6 +5,7 @@ import time
 import threading
 import sys
 from loggingsystem import writeLog
+from sensors.main_sensors import sens
 
 class UiFunc:
     '''All User Interface functions'''
@@ -279,8 +280,9 @@ class UiFunc:
             lines = csv.readlines()
 
         now = datetime.now()
-        dt_string = now.strftime("%H:%M:%S | %d.%m.%Y")
-        writeLog(len(lines), amount, kcal, fat, sugar, dt_string)
+        t_string = now.strftime("%H:%M:%S")
+        dt_string = now.strftime("%d.%m.%Y")
+        writeLog(len(lines), amount, kcal, fat, sugar, t_string, dt_string)
 
     #endregion result calculation
 
@@ -297,6 +299,14 @@ class UiFunc:
         
     #endregion TOPLEVEL
 
+    #region SENSORS
+    def startReedSensorThread():
+        '''starting new thread for reed sensor'''
+
+        thread = threading.Thread(target=sens.fetchReedSensorValues)
+        thread.setDaemon(True)
+        thread.start()
+    #endregion /SENSORS
 
 
 config = UiFunc.readConfigFile()        

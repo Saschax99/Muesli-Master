@@ -1,4 +1,3 @@
-#Import all the necessary libraries
 import customtkinter
 from tkinter import Label, Frame, CENTER, Toplevel
 from config.config import *
