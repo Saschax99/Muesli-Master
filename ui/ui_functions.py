@@ -300,10 +300,10 @@ class UiFunc:
     #endregion TOPLEVEL
 
     #region SENSORS
-    def startReedSensorThread():
+    def startReedSensorThread(main_instance):
         '''starting new thread for reed sensor'''
 
-        thread = threading.Thread(target=sens.fetchReedSensorValues)
+        thread = threading.Thread(target=sens.fetchReedSensorValues, args=(main_instance, ))
         thread.setDaemon(True)
         thread.start()
     #endregion /SENSORS

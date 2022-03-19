@@ -2,17 +2,20 @@
 import customtkinter
 from tkinter import Label, Frame, CENTER, LEFT, Toplevel, END
 from config.config import *
-from ui.ui_functions import UiFunc
+import configparser
+
 
 class InputSensorLevel:
     def __init__(self,
+                main_instance,
                 c_count):
 
         height = WINDOW_HEIGHT
         width = WINDOW_WIDTH
         self.c_count = c_count
-        config = UiFunc.readConfigFile()
-        self.c_name = config.get("c"+str(self.c_count), "name")
+        self.instance = main_instance
+        self.config = InputSensorLevel.readConfigFile()
+        self.c_name = self.config.get("c"+str(self.c_count), "name")
 
         self.top = Toplevel()
 
@@ -40,6 +43,115 @@ class InputSensorLevel:
 
         InputSensorLevel.loadContainerValues(self)
 
+    def readConfigFile():
+        '''reading config for containers'''
+
+        try:
+            parser_file = configparser.ConfigParser(allow_no_value=True, comment_prefixes='///')
+            parser_file.read(CONFIG_PATH, encoding='utf-8')
+            return parser_file
+        except Exception as e:
+            print(e)
+
+    def writeConfigFile(self, section, option, value):
+        '''writing config for containers'''
+
+        self.config.set(section, option, value)
+
+        with open(CONFIG_PATH, 'w', encoding="utf-8") as configfile: # save
+            self.config.write(configfile)
+
+    def updateContainerValues(self, instance):
+        '''update values of containers'''
+
+        for i in range(1, 4): # roll container 1 to 3
+            # setup all container details
+            exec('instance.container_'
+                + str(i)
+                + '_name.configure(text=self.config.get("c" + str(i), "name"))')
+
+            exec('instance.container_'
+                 + str(i) 
+                 + '_kcal.configure(text=self.config.get("c" + str(i), "kcal") + " Kcal/100g")')
+
+            exec('instance.container_' 
+                 + str(i)
+                 + '_fat.configure(text=self.config.get("c" + str(i), "fat")  + "g Fett/100g")')
+            exec('instance.container_' 
+                 + str(i) 
+                 + '_sugar.configure(text=self.config.get("c" + str(i), "sugar") + "g Zucker/100g")')
+
+            exec('instance.container_' 
+                 + str(i) 
+                 + '_percents_bar.set(float(self.config.get("c" + str(i), "fill_state")))')
+            # /setup all container details
+
+
+    def updatePortionShovels(self, instance, var1, var2, var3):
+        cur_size = int(var1) + int(var2) + int(var3)
+        instance.container_portion_value.configure(text=str(cur_size) + "/" + str(MAX_PORTION_SIZE) + " Schaufeln" + " | " + str(cur_size * GRAMM_PER_PORTION) + " Gramm")
+
+    def updateResultSize(self, instance):
+        '''update result size of portion'''
+
+        var_amount_1 = self.config.get(CONFIG_PORTIONS_NAME, "c1_amount")
+        instance.container_1_portion_amount.configure(text=str(var_amount_1))
+
+        var_amount_2 = self.config.get(CONFIG_PORTIONS_NAME, "c2_amount")
+        instance.container_2_portion_amount.configure(text=str(var_amount_2))
+
+        var_amount_3 = self.config.get(CONFIG_PORTIONS_NAME, "c3_amount")
+        instance.container_3_portion_amount.configure(text=str(var_amount_3))
+
+        InputSensorLevel.updatePortionShovels(self, instance, var_amount_1, var_amount_2, var_amount_3)
+
+    def updateResult(self, instance, kcal, fat, sugar):
+        '''updating result portion'''
+
+        instance.label_portion_nutritional_values_kcal.configure(text=str(kcal) + " Kcal")
+        instance.label_portion_nutritional_values_fat.configure(text=str(fat) + " Fett")
+        instance.label_portion_nutritional_values_sugar.configure(text=str(sugar) + " Zucker")
+
+    def calculateResultValues(self, instance):
+        '''calculate result values for portion'''
+
+        c1_count = float(self.config.get("portionsettings", "c1_amount"))
+        c2_count = float(self.config.get("portionsettings", "c2_amount"))
+        c3_count = float(self.config.get("portionsettings", "c3_amount"))
+
+        c1_kcal = float(self.config.get("c1", "kcal"))
+        c1_fat = float(self.config.get("c1", "fat"))
+        c1_sugar = float(self.config.get("c1", "sugar"))
+
+        c2_kcal = float(self.config.get("c2", "kcal"))
+        c2_fat = float(self.config.get("c2", "fat"))
+        c2_sugar = float(self.config.get("c2", "sugar"))
+
+        c3_kcal = float(self.config.get("c3", "kcal"))
+        c3_fat = float(self.config.get("c3", "fat"))
+        c3_sugar = float(self.config.get("c3", "sugar"))
+
+        kcal_result = round(((c1_count * (c1_kcal))
+                            + (c2_count * (c2_kcal))
+                            + (c3_count * (c3_kcal)))
+                            / CALCULATION_RATIO, 1)
+
+        fat_result = round(((c1_count * (c1_fat))
+                            + (c2_count * (c2_fat))
+                            + (c3_count * (c3_fat)))
+                            / CALCULATION_RATIO, 1)
+
+        sugar_result = round(((c1_count * (c1_sugar))
+                            + (c2_count * (c2_sugar))
+                            + (c3_count * (c3_sugar))) 
+                            / CALCULATION_RATIO, 1)
+
+        InputSensorLevel.writeConfigFile(self, "portionsettings", "kcal", str(kcal_result))
+        InputSensorLevel.writeConfigFile(self, "portionsettings", "fat", str(fat_result))
+        InputSensorLevel.writeConfigFile(self, "portionsettings", "sugar", str(sugar_result))
+
+        InputSensorLevel.updateResult(self, instance, kcal_result, fat_result, sugar_result)
+
     def loadTopBar(self):
         self.top_frame = Frame(self.top, 
                                height=40, 
@@ -47,31 +159,18 @@ class InputSensorLevel:
                                bg=TOP_BORDER_BG_COLOR)
         self.top_frame.place(x=BORDER_TOP_X,y=BORDER_TOP_Y)
 
-
         Frame(self.top,
               height=3,
               width=800,
               bg=BORDER_ACCENTS_BG_COLOR).place(x=0, y=40)
         # title name
         self.top_name = Label(self.top_frame, 
-                              text="Einstellungen",
+                              text="Behälter Zuweisung",
                               bg=TOP_BORDER_BG_COLOR, 
                               fg="white",
-                              width=12, 
+                              width=17, 
                               font=(TEXT_FONT, TITLE_FONTSIZE)) 
         self.top_name.place(x=30, y=5)
-
-        self.button_back = customtkinter.CTkButton(master=self.top_frame, 
-                                                   text="Zurück", 
-                                                   compound="right", 
-                                                   text_font=(TEXT_FONT, STANDARD_FONTSIZE), 
-                                                   text_color="white", 
-                                                   bg_color=TOP_BORDER_BG_COLOR,
-                                                   fg_color=BUTTON_BG_COLOR,
-                                                   hover_color=BUTTON_HOVER_BG_COLOR,
-                                                   command=lambda: UiFunc.closeTopLevel(self))
-        self.button_back.place(x=722, y=20, anchor=CENTER)
-
 
     def container(self):
         InputSensorLevel.create_container_shadow(self.top, # SHADOW
@@ -235,25 +334,33 @@ class InputSensorLevel:
                                corner_radius = 3,
                                fg_color = color).place(x=posx - 2, y=posy - 2)     
 
-    
-    def Save(self):
-        UiFunc.writeConfigFile("c"+ str(self.c_count), "name", str(self.entry_name.get()))
-        UiFunc.writeConfigFile("c"+ str(self.c_count), "kcal", str(self.entry_kcal.get()))
-        UiFunc.writeConfigFile("c"+ str(self.c_count), "fat", str(self.entry_fat.get()))
-        UiFunc.writeConfigFile("c"+ str(self.c_count), "sugar", str(self.entry_sugar.get()))
+    def writeConfigFile(self, section, option, value):
+        '''writing config for containers'''
 
-        if self.c_count == 1:
-            self.instance.container_1_settings.configure(text=str(self.entry_name.get()))
-        if self.c_count == 2:
-            self.instance.container_2_settings.configure(text=str(self.entry_name.get()))
-        if self.c_count == 3:
-            self.instance.container_3_settings.configure(text=str(self.entry_name.get()))
+        self.config.set(section, option, value)
+
+        with open(CONFIG_PATH, 'w', encoding="utf-8") as configfile: # save
+            self.config.write(configfile)
+
+    def closeTopLevel(self, instance):
+    
+        InputSensorLevel.updateContainerValues(self, instance)
+        InputSensorLevel.updateResultSize(self, instance)
+        InputSensorLevel.calculateResultValues(self, instance)
+        self.top.destroy()
+
+    def Save(self):
+        print("saving")
+        InputSensorLevel.writeConfigFile(self, "c"+ str(self.c_count), "name", str(self.entry_name.get()))
+        InputSensorLevel.writeConfigFile(self, "c"+ str(self.c_count), "kcal", str(self.entry_kcal.get()))
+        InputSensorLevel.writeConfigFile(self, "c"+ str(self.c_count), "fat", str(self.entry_fat.get()))
+        InputSensorLevel.writeConfigFile(self, "c"+ str(self.c_count), "sugar", str(self.entry_sugar.get()))
             
-        UiFunc.closeTopLevel(self)
+        InputSensorLevel.closeTopLevel(self, self.instance)
 
 
     def loadContainerValues(self):
-        config = UiFunc.readConfigFile()
+        config = InputSensorLevel.readConfigFile()
         self.entry_name.insert(END, config.get("c"+ str(self.c_count), "name"))
         self.entry_kcal.insert(END, config.get("c"+ str(self.c_count), "kcal"))
         self.entry_fat.insert(END, config.get("c"+ str(self.c_count), "fat"))

@@ -1,13 +1,9 @@
 https://tkdocs.com/tutorial/styles.html
 https://github.com/TomSchimansky/CustomTkinter
 
-
-
 neue class um gui elemente darzustellen
 btn1 = class(var1,var2, ...)
 efficiency
-
-
 
 13.02.2022
     clean class functions for initialize materials
@@ -16,7 +12,7 @@ efficiency
         and editable values
     button started
         cant print text in front of label background button
-    
+
 14.02.2022
     cleaned up functions with syntax
     set region for ui script
@@ -25,7 +21,6 @@ efficiency
 27.02.2022
     actived supply window needs to refresh after beeing in settings and changed
     variables are declared but cant access them, because of circulating
-
 
 08.03.2022
     delete in ui_toplevel 2 sliderfunction and use only 1
@@ -61,8 +56,6 @@ efficiency
     function to write values of input entry to config
     new toplevel designs
 
-
-
 git init
 git remote add origin https://github.com/Saschax99/Muesli-Master.git
 git add "" or git add . for everything
@@ -70,10 +63,7 @@ git commit -m "first commit 09.03.2022" ex.
 git status was verändert wurde
 git push
 
-
 every element definieren mit ex. # ENTRY KCAL
-
-
 
 Portionsgröße entfernen -> Portionsmenge angeben: 6 Löffel mit x Gramm
 Checkboxen entfernen -> Wenn behälter Leer dann Buttons deaktiviert

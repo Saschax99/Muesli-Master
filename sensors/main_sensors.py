@@ -3,7 +3,7 @@ import sys
 if not "win" in sys.platform: import RPi.GPIO as GPIO
 import time
 from config.config import GPIO_ULTRASONIC_TR_PIN, GPIO_ULTRASONIC_ECH_PIN, GPIO_REED_PIN
-# from ui.ui_input_sensor import InputSensorLevel CIRCULATING ISSUE
+from ui.ui_input_sensor import InputSensorLevel
 
 if not "win" in sys.platform: 
     GPIO.setmode(GPIO.BCM)
@@ -36,23 +36,23 @@ class sens:
         if not "win" in sys.platform: GPIO.cleanup() # clean gpios
         return distance
 
-    def fetchReedSensorValues():
+    def fetchReedSensorValues(main_instance):
         '''starting fetching reed sensor values'''
-        sens.openEditor(1)
+        sens.openEditor(main_instance, 1) # delete later
         c1_callback = False
         if not "win" in sys.platform:
             while True:
                 try:
                     if GPIO.input(GPIO_REED_PIN) == GPIO.HIGH and c1_callback:
                         print("true sensor")
-                        sens.openEditor()
+                        sens.openEditor(main_instance, 1)
                         c1_callback = True
                         # OPEN CONTAINER 1 INPUT WINDOW AND ONLY ACCEPT BUTTON
                 except KeyboardInterrupt:
                     exit()
  
-    def openEditor(container_count):
-        #InputSensorLevel(c_count=container_count) #parse instance to refresh textboxes
+    def openEditor(main_instance, container_count):
+        InputSensorLevel(main_instance, c_count=container_count) #parse instance to refresh textboxes
         pass
 
 
