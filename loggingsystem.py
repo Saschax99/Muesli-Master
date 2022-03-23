@@ -7,7 +7,13 @@ def writeLog(row1, row2, row3, row4, row5, row6, row7):
 
     with open(LOGSYSTEM_PATH, 'a', newline='', encoding='utf-8') as f:
         writer = csv.writer(f, delimiter=';')
-        writer.writerow([row1, row2, row3, row4, row5, row6, row7])
+        writer.writerow([row1,
+                         row2, 
+                         "=\"" + row3 + "\"", # converting to correct format for float values
+                         "=\"" + row4 + "\"", 
+                         "=\"" + row5 + "\"", 
+                         row6, 
+                         row7])
 
 def logging():
     '''logging system | create'''
