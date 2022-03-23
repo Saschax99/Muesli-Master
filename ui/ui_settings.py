@@ -75,14 +75,14 @@ class TLevel:
                                         height = CONTAINER_UI_SETTINGS_HEIGHT, 
                                         color = CONTAINER_SHADOW_COLOR,
                                         posx = 276, 
-                                        posy = 114)
+                                        posy = 75)
 
         self.container_1 = customtkinter.CTkFrame(master=self.top,
                                                         width=CONTAINER_UI_SETTINGS_WIDTH,
                                                         height=CONTAINER_UI_SETTINGS_HEIGHT,
                                                         corner_radius=5,
                                                         fg_color="white")
-        self.container_1.place(x=276, y=114)
+        self.container_1.place(x=276, y=75)
 
         #region container 1
 
@@ -137,6 +137,53 @@ class TLevel:
                                                         command=lambda: TLevel.openEditor(self, 3))
         self.container_3_settings.place(x=16, y=184)         
         #endregion container 3
+
+        #region edit max. size portion
+        customtkinter.CTkFrame(master=self.container_1,
+                               width=self.container_1.winfo_reqwidth(),
+                               height=2,
+                               corner_radius=10,
+                               fg_color=ACCENTS_BG_COLOR).place(x=0, y=250)
+
+        self.port_title = Label(self.container_1, 
+                              text="Maximale Portionsgröße",
+                              bg="white", 
+                              fg="black",
+                              width=19, 
+                              font=(TEXT_FONT, TITLE_FONTSIZE)) 
+        self.port_title.place(x=16, y=261)
+
+        self.port_size_dec = customtkinter.CTkButton(master=self.container_1, 
+                                                            text="-", 
+                                                            width=50,
+                                                            height=32,
+                                                            fg_color=BUTTON_BG_COLOR,
+                                                            text_color="white",
+                                                            text_font=(TEXT_FONT, TITLE_FONTSIZE),
+                                                            hover_color=BUTTON_HOVER_BG_COLOR,
+                                                            command=lambda: UiFunc.portionMaximumDecrease(self))
+        self.port_size_dec.place(x=40, y=295)    
+
+        config = UiFunc.readConfigFile()
+        self.port_value = Label(self.container_1, 
+                              text=config.get("portionsettings", "max_portion_size"),
+                              bg="white", 
+                              fg="black",
+                              width=4, 
+                              font=(TEXT_FONT, TITLE_FONTSIZE)) 
+        self.port_value.place(x=100, y=295)
+
+        self.port_size_inc = customtkinter.CTkButton(master=self.container_1, 
+                                                            text="+", 
+                                                            width=50,
+                                                            height=32,
+                                                            fg_color=BUTTON_BG_COLOR,
+                                                            text_color="white",
+                                                            text_font=(TEXT_FONT, TITLE_FONTSIZE),
+                                                            hover_color=BUTTON_HOVER_BG_COLOR,
+                                                            command=lambda: UiFunc.portionMaximumIncrease(self))
+        self.port_size_inc.place(x=160, y=295)   
+        #endregion /edit max. size portion
 
     def loadBottomBar(self):
         Frame(self.top, 

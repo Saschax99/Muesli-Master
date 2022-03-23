@@ -38,15 +38,15 @@ class sens:
 
     def fetchReedSensorValues(main_instance):
         '''starting fetching reed sensor values'''
-        sens.openEditor(main_instance, 1) # delete later
+        #sens.openEditor(main_instance, 1) # delete later
         c1_callback = False
         if not "win" in sys.platform:
             while True:
                 try:
-                    if GPIO.input(GPIO_REED_PIN) == GPIO.HIGH and c1_callback:
-                        print("true sensor")
+                    if GPIO.input(GPIO_REED_PIN) == GPIO.LOW and not c1_callback:
                         sens.openEditor(main_instance, 1)
                         c1_callback = True
+                        print("true sensor")
                         # OPEN CONTAINER 1 INPUT WINDOW AND ONLY ACCEPT BUTTON
                 except KeyboardInterrupt:
                     exit()

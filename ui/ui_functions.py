@@ -32,7 +32,7 @@ class UiFunc:
 
     def updatePortionShovels(self, var1, var2, var3):
         cur_size = int(var1) + int(var2) + int(var3)
-        self.container_portion_value.configure(text=str(cur_size) + "/" + str(MAX_PORTION_SIZE) + " Schaufeln" + " | " + str(cur_size * GRAMM_PER_PORTION) + " Gramm")
+        self.container_portion_value.configure(text=str(cur_size) + "/" + str(config.get(CONFIG_PORTIONS_NAME, "max_portion_size")) + " Schaufeln" + " | " + str(cur_size * GRAMM_PER_PORTION) + " Gramm")
 
 
     def resetResultValues(self, count = 0):
@@ -57,7 +57,7 @@ class UiFunc:
         c3_amount = int(config.get(CONFIG_PORTIONS_NAME, "c3_amount"))
         c_all_amount = c1_amount + c2_amount + c3_amount
 
-        if int(c_all_amount) == int(MAX_PORTION_SIZE): # if max reached return
+        if int(c_all_amount) == int(config.get(CONFIG_PORTIONS_NAME, "max_portion_size")): # if max reached return
             return
 
         if con == 1:
@@ -126,6 +126,27 @@ class UiFunc:
         if count == 3:
             self.button_container_3_inc.configure(state= "normal", fg_color=BUTTON_BG_COLOR)
             self.button_container_3_dec.configure(state= "normal", fg_color=BUTTON_BG_COLOR)
+
+
+    def portionMaximumDecrease(self):
+        '''decrease the value of maximum portion size in settings'''
+
+        current_val = int(config.get(CONFIG_PORTIONS_NAME, "max_portion_size"))
+        if current_val <= 0:
+            return
+        else: # if current value is not below 0
+            for i in range(1, 4): # reset all active values
+                UiFunc.writeConfigFile(CONFIG_PORTIONS_NAME, "c" + str(i) + "_amount", str(0))
+
+            UiFunc.writeConfigFile(CONFIG_PORTIONS_NAME, "max_portion_size", str(current_val - 1))
+            self.port_value.configure(text = str(current_val - 1))
+
+    def portionMaximumIncrease(self):
+        '''increase the value of maximum portion size in settings'''
+
+        current_val = int(config.get(CONFIG_PORTIONS_NAME, "max_portion_size"))
+        UiFunc.writeConfigFile(CONFIG_PORTIONS_NAME, "max_portion_size", str(current_val + 1))
+        self.port_value.configure(text = str(current_val + 1))
     #endregion portions size   
  
     def refreshDateTime(self):
@@ -190,36 +211,13 @@ class UiFunc:
                  + '_percents_bar.set(float(config.get("c" + str(i), "fill_state")))')
             # /setup all container details
 
-    #region checkboxes
-    def switchCheckboxState(self, instance, count):
-        '''updating checkboxes for supply'''
-
-        if config.get("c" + str(count), "supply_active") == str(True):
-            instance.configure(fg_color="white")
-            UiFunc.writeConfigFile("c" + str(count), "supply_active", str(False))
-            UiFunc.resetResultValues(self, count)
-            UiFunc.updateResultSize(self)
-            UiFunc.updatePortionValues(self)
-            UiFunc.disableButton(self, count)
-            UiFunc.calculateResultValues(self)
-
-        else:
-            instance.configure(fg_color=CHECKBOX_BG_COLOR)
-            UiFunc.writeConfigFile("c" + str(count), "supply_active", str(True))
-            UiFunc.enableButton(self, count)
-
-
-                # UiFunc.resetResultValues(self, i) # not necessary
-                # UiFunc.disableButton(self, i)      
-    #endregion checkboxes
-
     #region result calculation
     def calculateResultValues(self):
         '''calculate result values for portion'''
 
-        c1_count = float(config.get("portionsettings", "c1_amount"))
-        c2_count = float(config.get("portionsettings", "c2_amount"))
-        c3_count = float(config.get("portionsettings", "c3_amount"))
+        c1_count = float(config.get(CONFIG_PORTIONS_NAME, "c1_amount"))
+        c2_count = float(config.get(CONFIG_PORTIONS_NAME, "c2_amount"))
+        c3_count = float(config.get(CONFIG_PORTIONS_NAME, "c3_amount"))
 
         c1_kcal = float(config.get("c1", "kcal"))
         c1_fat = float(config.get("c1", "fat"))
@@ -248,9 +246,9 @@ class UiFunc:
                             + (c3_count * (c3_sugar))) 
                             / CALCULATION_RATIO, 1)
 
-        UiFunc.writeConfigFile("portionsettings", "kcal", str(kcal_result))
-        UiFunc.writeConfigFile("portionsettings", "fat", str(fat_result))
-        UiFunc.writeConfigFile("portionsettings", "sugar", str(sugar_result))
+        UiFunc.writeConfigFile(CONFIG_PORTIONS_NAME, "kcal", str(kcal_result))
+        UiFunc.writeConfigFile(CONFIG_PORTIONS_NAME, "fat", str(fat_result))
+        UiFunc.writeConfigFile(CONFIG_PORTIONS_NAME, "sugar", str(sugar_result))
 
         UiFunc.updateResult(self, kcal_result, fat_result, sugar_result)
 
@@ -264,17 +262,17 @@ class UiFunc:
     def serve():
         if DEBUG: print("Serving...")
 
-        amount = (int(config.get("portionsettings", "c1_amount"))
-                + int(config.get("portionsettings", "c2_amount"))
-                + int(config.get("portionsettings", "c3_amount")))
+        amount = (int(config.get(CONFIG_PORTIONS_NAME, "c1_amount"))
+                + int(config.get(CONFIG_PORTIONS_NAME, "c2_amount"))
+                + int(config.get(CONFIG_PORTIONS_NAME, "c3_amount")))
 
         if amount <= 0: # if 0 quit
             print("no amount set")
             return
             
-        kcal = config.get("portionsettings", "kcal")
-        fat = config.get("portionsettings", "fat")
-        sugar = config.get("portionsettings", "sugar")
+        kcal = config.get(CONFIG_PORTIONS_NAME, "kcal")
+        fat = config.get(CONFIG_PORTIONS_NAME, "fat")
+        sugar = config.get(CONFIG_PORTIONS_NAME, "sugar")
 
         with open(LOGSYSTEM_PATH, 'r') as csv: # get number of entries
             lines = csv.readlines()
