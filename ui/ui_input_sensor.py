@@ -1,9 +1,42 @@
 #Import all the necessary libraries
-import customtkinter
-from tkinter import Label, Frame, CENTER, LEFT, Toplevel, END
+import customtkinter # here
+from tkinter import Label, Frame, CENTER, LEFT, Toplevel, END, LabelFrame, Button
 from config.config import *
 import configparser
+import sys
 
+keys =[ 
+    [
+    # =========================================
+    # ===== Keyboard Configurations ===========
+    # =========================================
+
+        [
+            ("Character_Keys"),
+            ({'side':'top','expand':'yes','fill':'both'}),
+            [
+                ('q','w','e','r','t','z','u','i','o','p'),
+                ('a','s','d','f','g','h','j','k','l'),
+                ('y','x','c','v','b','n','m', '.', '<'),
+                ('Space',)
+            ]
+        ]
+    ],
+    [
+
+        [
+        ("Numeric_Keys"),
+        ({'side':'top','expand':'yes','fill':'both'}),
+        [
+            ("7","8","9"),
+            ("4","5","6"),
+            ("1","2","3"),
+            ("0")
+        ]
+        ]
+
+    ]
+]
 
 class InputSensorLevel:
     def __init__(self,
@@ -16,14 +49,17 @@ class InputSensorLevel:
         self.instance = main_instance
         self.config = InputSensorLevel.readConfigFile()
         self.c_name = self.config.get("c"+str(self.c_count), "name")
-
+        self.entry_count = 0
         self.top = Toplevel()
 
         #region MAIN SETTINGS AND BACKGROUND
         self.top.title("Einstellungen")
         self.top.geometry(f"{width}x{height}") #Define the size of the tkinter frame
-        self.top.attributes("-fullscreen", False)
-        #master.attributes('-alpha',0.85) # transparent
+        if not "win" in sys.platform: # if execute on rpi get fullscreen
+            self.top.attributes("-fullscreen", True)
+        else:
+            self.top.attributes("-fullscreen", False)
+
         self.bg = Label(self.top, bg = WINDOW_BG_COLOR, width = WINDOW_WIDTH, height = WINDOW_HEIGHT) # background color
         self.bg.place(x=0, y =0)
 
@@ -42,6 +78,8 @@ class InputSensorLevel:
         InputSensorLevel.loadBottomBar(self)
 
         InputSensorLevel.loadContainerValues(self)
+
+        InputSensorLevel.loadKeyboard(self)
 
     def readConfigFile():
         '''reading config for containers'''
@@ -89,7 +127,7 @@ class InputSensorLevel:
 
     def updatePortionShovels(self, instance, var1, var2, var3):
         cur_size = int(var1) + int(var2) + int(var3)
-        instance.container_portion_value.configure(text=str(cur_size) + "/" + str(MAX_PORTION_SIZE) + " Schaufeln" + " | " + str(cur_size * GRAMM_PER_PORTION) + " Gramm")
+        instance.container_portion_value.configure(text=str(cur_size) + "/" + str(self.config.get(CONFIG_PORTIONS_NAME, "max_portion_size")) + " Schaufeln" + " | " + str(cur_size * GRAMM_PER_PORTION) + " Gramm")
 
     def updateResultSize(self, instance):
         '''update result size of portion'''
@@ -191,7 +229,7 @@ class InputSensorLevel:
         self.container_input_name = Label(self.container_input, # NAME OF CONTAINER
                                       text=self.c_name,
                                       bg="white", 
-                                      width=16, 
+                                      width=29, 
                                       font=(TEXT_FONT, TITLE_FONTSIZE)) 
         self.container_input_name.place(x=(self.container_input.winfo_reqwidth() / 4) + 10, y=5) 
 
@@ -208,7 +246,7 @@ class InputSensorLevel:
                                       justify=LEFT,
                                       anchor="w",
                                       font=(TEXT_FONT, SMALL_FONTSIZE)) 
-        self.container_name.place(x=40, y=46) 
+        self.container_name.place(x=20, y=41) 
 
         self.entry_name = customtkinter.CTkEntry(master=self.container_input, # ENTRY NAME
                                                 placeholder_text="Container Name..", 
@@ -219,13 +257,8 @@ class InputSensorLevel:
                                                 fg_color=TEXT_BORDER_COLOR,
                                                 corner_radius=8,
                                                 width=300)
-        self.entry_name.place(x=40, y=67)
-
-        customtkinter.CTkFrame(master=self.container_input, # BORDER 2
-                               width=self.container_input.winfo_reqwidth(),
-                               height=2,
-                               corner_radius=10,
-                               fg_color=ACCENTS_BG_COLOR).place(x=0, y=112)
+        self.entry_name.bind("<FocusIn>", lambda event: InputSensorLevel.changeInputFocus(self, 1))
+        self.entry_name.place(x=20, y=62)
 
 
         self.container_kcal = Label(self.container_input, # NAME OF ENTRY
@@ -235,7 +268,7 @@ class InputSensorLevel:
                                       justify=LEFT,
                                       anchor="w",
                                       font=(TEXT_FONT, SMALL_FONTSIZE)) 
-        self.container_kcal.place(x=40, y=123) 
+        self.container_kcal.place(x=380, y=41) 
 
         self.entry_kcal = customtkinter.CTkEntry(master=self.container_input, # ENTRY KCAL
                                                 placeholder_text="Kcal..", 
@@ -246,13 +279,14 @@ class InputSensorLevel:
                                                 fg_color=TEXT_BORDER_COLOR,
                                                 corner_radius=8,
                                                 width=300)
-        self.entry_kcal.place(x=40, y=144)
+        self.entry_kcal.bind("<FocusIn>", lambda event: InputSensorLevel.changeInputFocus(self, 2))
+        self.entry_kcal.place(x=380, y=62)
 
-        customtkinter.CTkFrame(master=self.container_input, # BORDER 3
+        customtkinter.CTkFrame(master=self.container_input, # BORDER 2
                                width=self.container_input.winfo_reqwidth(),
                                height=2,
                                corner_radius=10,
-                               fg_color=ACCENTS_BG_COLOR).place(x=0, y=189)
+                               fg_color=ACCENTS_BG_COLOR).place(x=0, y=102)
 
 
         self.container_fat = Label(self.container_input, # NAME OF ENTRY
@@ -262,7 +296,7 @@ class InputSensorLevel:
                                       justify=LEFT,
                                       anchor="w",
                                       font=(TEXT_FONT, SMALL_FONTSIZE)) 
-        self.container_fat.place(x=40, y=200) 
+        self.container_fat.place(x=20, y=108) 
 
         self.entry_fat = customtkinter.CTkEntry(master=self.container_input, # ENTRY FAT
                                                 placeholder_text="Fett..", 
@@ -273,14 +307,8 @@ class InputSensorLevel:
                                                 fg_color=TEXT_BORDER_COLOR,
                                                 corner_radius=8,
                                                 width=300)
-        self.entry_fat.place(x=40, y=221)
-
-        customtkinter.CTkFrame(master=self.container_input, # BORDER 4
-                               width=self.container_input.winfo_reqwidth(),
-                               height=2,
-                               corner_radius=10,
-                               fg_color=ACCENTS_BG_COLOR).place(x=0, y=266)
-
+        self.entry_fat.bind("<FocusIn>", lambda event: InputSensorLevel.changeInputFocus(self, 3))                                        
+        self.entry_fat.place(x=20, y=129)
 
 
         self.container_sugar = Label(self.container_input, # NAME OF ENTRY
@@ -290,7 +318,7 @@ class InputSensorLevel:
                                       justify=LEFT,
                                       anchor="w",
                                       font=(TEXT_FONT, SMALL_FONTSIZE)) 
-        self.container_sugar.place(x=40, y=277) 
+        self.container_sugar.place(x=380, y=108) 
 
         self.entry_sugar = customtkinter.CTkEntry(master=self.container_input, # ENTRY SUGAR
                                                 placeholder_text="Zucker..", 
@@ -301,7 +329,16 @@ class InputSensorLevel:
                                                 fg_color=TEXT_BORDER_COLOR,
                                                 corner_radius=8,
                                                 width=300)
-        self.entry_sugar.place(x=40, y=297)
+        self.entry_sugar.bind("<FocusIn>", lambda event: InputSensorLevel.changeInputFocus(self, 4))                                                  
+        self.entry_sugar.place(x=380, y=129)
+
+        customtkinter.CTkFrame(master=self.container_input, # BORDER 3
+                               width=self.container_input.winfo_reqwidth(),
+                               height=2,
+                               corner_radius=10,
+                               fg_color=ACCENTS_BG_COLOR).place(x=0, y=174)
+
+
 
 
         self.button_save = customtkinter.CTkButton(master=self.top, 
@@ -314,7 +351,7 @@ class InputSensorLevel:
                                            hover_color=BUTTON_HOVER_BG_COLOR,
                                            text_font=(TEXT_FONT, TITLE_FONTSIZE), 
                                            command=lambda: InputSensorLevel.Save(self))
-        self.button_save.place(x=400, y=427, anchor=CENTER)
+        self.button_save.place(x=400, y=433, anchor=CENTER)
 
     def loadBottomBar(self):
         Frame(self.top, 
@@ -326,6 +363,53 @@ class InputSensorLevel:
             width=800,
             bg=BORDER_ACCENTS_BG_COLOR).place(x=0, y=452)
 
+
+    def button_command(self, event):
+        try:
+            entry_instance = InputSensorLevel.inputFocus(self, self.entry_count)
+            if event == "<": # delete last character if backspace
+                entry_instance.delete(len(entry_instance.get())-1, END)
+            elif event == "Space":
+                entry_instance.insert(END, " ")
+            else: 
+                entry_instance.insert(END, event)
+
+        except AttributeError:
+            return
+
+    def create_frames_and_buttons(self):
+        for key_section in keys:
+            store_section = Frame(self.top)
+            if keys[0][0][0] ==  key_section[0][0]: # if 
+                store_section.place(x=59, y=220)
+            elif keys[1][0][0] ==  key_section[0][0]:
+                store_section.place(x=581, y=220)
+            #store_section.pack(side='left',expand='yes',fill='both')
+                
+            for layer_name, layer_properties, layer_keys in key_section:
+                store_layer = LabelFrame(store_section)#, text=layer_name)
+                store_layer.pack(layer_properties)
+                for key_bunch in layer_keys:
+                    store_key_frame = Frame(store_layer)
+                    store_key_frame.pack(side='top',expand='yes',fill='both')
+                    for k in key_bunch:
+                        #k=k.capitalize()
+                        if len(k)<=3:
+                            if not "win" in sys.platform: 
+                                store_button = Button(store_key_frame, text=k, width=3, height=2)
+                            else:
+                                store_button = Button(store_key_frame, text=k, width=6, height=2)
+
+                        else:
+                            store_button = Button(store_key_frame, text=k.center(5,' '), height=2)
+                        # if " " in k:
+                        #     store_button['state']='disable'
+                        #flat, groove, raised, ridge, solid, or sunken
+                        store_button['relief']="sunken"
+                        store_button['bg']="#2f49cf"
+                        store_button['fg']="white"
+                        store_button['command']=lambda q=k: InputSensorLevel.button_command(self, event=q)
+                        store_button.pack(side='left',fill='both',expand='yes')
 
     def create_container_shadow(master, width, height, color, posx, posy):
         customtkinter.CTkFrame(master=master,
@@ -349,9 +433,40 @@ class InputSensorLevel:
         InputSensorLevel.calculateResultValues(self, instance)
         self.top.destroy()
 
+    def isFloat(list):
+        '''check if tuple list are float values or not'''
+        try:
+            for element in list:
+                float(element)
+            return True
+        except ValueError:
+            return False
+
+    def loadKeyboard(self):
+        InputSensorLevel.create_frames_and_buttons(self)
+
+    def changeInputFocus(self, entry):
+        self.entry_count = entry
+        print(self.entry_count)
+
+    def inputFocus(self, entry):
+        print("input")
+        if entry == 1:
+            return self.entry_name
+        elif entry == 2:
+            return self.entry_kcal
+        elif entry == 3:
+            return self.entry_fat
+        elif entry == 4:
+            return self.entry_sugar
+        else:
+            return None
+
     def Save(self):
-        print("saving")
-        InputSensorLevel.writeConfigFile(self, "c"+ str(self.c_count), "name", str(self.entry_name.get()))
+        '''save all inputs into config'''
+        if not InputSensorLevel.isFloat((self.entry_kcal.get(),self.entry_fat.get(),self.entry_sugar.get())): # if not float value return
+            return
+        InputSensorLevel.writeConfigFile(self, "c"+ str(self.c_count), "name", str(self.entry_name.get()).capitalize())
         InputSensorLevel.writeConfigFile(self, "c"+ str(self.c_count), "kcal", str(self.entry_kcal.get()))
         InputSensorLevel.writeConfigFile(self, "c"+ str(self.c_count), "fat", str(self.entry_fat.get()))
         InputSensorLevel.writeConfigFile(self, "c"+ str(self.c_count), "sugar", str(self.entry_sugar.get()))

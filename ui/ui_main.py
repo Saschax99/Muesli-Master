@@ -6,6 +6,7 @@ from PIL import Image, ImageTk
 from config.config import *
 from ui.ui_functions import UiFunc
 from functions import openTopLevel
+import sys
 
 class InitializeMainTkWindow:
     def __init__(self, master):
@@ -14,10 +15,13 @@ class InitializeMainTkWindow:
         width = WINDOW_WIDTH
         master.title("Müsli-Master")
         master.geometry(f"{width}x{height}") #Define the size of the tkinter frame
-        master.attributes("-fullscreen", False)
-        #master.attributes('-alpha',0.85) # transparent
+        if not "win" in sys.platform: # if execute on rpi get fullscreen
+            master.attributes("-fullscreen", True)
+        else:
+            master.attributes("-fullscreen", False)
+
         self.bg = Label(master, bg = WINDOW_BG_COLOR, width = 800, height = 480) # background color
-        self.bg.place(x=0, y =0)
+        self.bg.place(x=0, y=0)
         master.resizable(False, False)
         #endregion
  
@@ -571,7 +575,7 @@ class InitializeMainTkWindow:
                               fg=TEXT_BORDER_COLOR,
                               justify=LEFT,
                               anchor="w",
-                              width=16, 
+                              width=18, 
                               font=(TEXT_FONT, SMALL_FONTSIZE),) 
         self.bot_date.place(x=0,y=2)
 
@@ -583,7 +587,7 @@ class InitializeMainTkWindow:
                               fg=TEXT_BORDER_COLOR,
                             justify=RIGHT,
                               anchor="e",
-                              width=25, 
+                              width=26, 
                               font=(TEXT_FONT, SMALL_FONTSIZE),) 
         self.bot_footer.place(x=594,y=2)
 

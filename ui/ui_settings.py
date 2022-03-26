@@ -3,6 +3,7 @@ from tkinter import Label, Frame, CENTER, Toplevel
 from config.config import *
 from ui.ui_functions import UiFunc
 from ui.ui_input import InputLevel
+import sys
 
 class TLevel:
     def __init__(self,
@@ -16,7 +17,10 @@ class TLevel:
         #region MAIN SETTINGS AND BACKGROUND
         self.top.title("Einstellungen")
         self.top.geometry(f"{width}x{height}") #Define the size of the tkinter frame
-        self.top.attributes("-fullscreen", False)
+        if not "win" in sys.platform: # if execute on rpi get fullscreen
+            self.top.attributes("-fullscreen", True)
+        else:
+            self.top.attributes("-fullscreen", False)
         #master.attributes('-alpha',0.85) # transparent
         self.bg = Label(self.top, bg = WINDOW_BG_COLOR, width = WINDOW_WIDTH, height = WINDOW_HEIGHT) # background color
         self.bg.place(x=0, y =0)
@@ -149,7 +153,7 @@ class TLevel:
                               text="Maximale Portionsgröße",
                               bg="white", 
                               fg="black",
-                              width=19, 
+                              width=20, 
                               font=(TEXT_FONT, TITLE_FONTSIZE)) 
         self.port_title.place(x=16, y=261)
 

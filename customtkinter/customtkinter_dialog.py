@@ -5,6 +5,7 @@ from customtkinter.customtkinter_color_manager import CTkColorManager
 
 from config.config import BUTTON_HOVER_BG_COLOR, BUTTON_BG_COLOR, TEXT_FONT, STANDARD_FONTSIZE, WINDOW_BG_COLOR
 from ui.ui_functions import UiFunc
+import sys
 
 class CTkDialog:
     def __init__(self,
@@ -19,8 +20,8 @@ class CTkDialog:
 
         self.user_input = None
 
-        self.height = 125
-        self.width = 280
+        self.height = 480
+        self.width = 800
 
         self.fg_color = CTkColorManager.MAIN if fg_color == "CTkColorManager" else fg_color
         self.hover_color = CTkColorManager.MAIN_HOVER if hover_color == "CTkColorManager" else hover_color
@@ -32,12 +33,16 @@ class CTkDialog:
         self.top.lift()
         self.top.focus_force()
         self.top.grab_set()
+        if not "win" in sys.platform: # if execute on rpi get fullscreen
+            self.top.attributes("-fullscreen", True)
+        else:
+            self.top.attributes("-fullscreen", False)
 
 
         self.button_frame = tkinter.Frame(master=self.top,
                                                     width=self.width,
                                                     background=WINDOW_BG_COLOR,
-                                                    height=125)
+                                                    height=480)
         self.button_frame.place(x=0, y=0)
 
         self.myLabel = CTkLabel(master=self.button_frame, # text question frame

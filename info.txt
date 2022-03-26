@@ -56,6 +56,12 @@ efficiency
     function to write values of input entry to config
     new toplevel designs
 
+27.03.2022
+    new design at input-page
+    implemented keyboard design at input-page
+    keyboards functions created
+    
+
 git init
 git remote add origin https://github.com/Saschax99/Muesli-Master.git
 git add "" or git add . for everything
@@ -67,3 +73,7 @@ every element definieren mit ex. # ENTRY KCAL
 
 Portionsgröße entfernen -> Portionsmenge angeben: 6 Löffel mit x Gramm
 Checkboxen entfernen -> Wenn behälter Leer dann Buttons deaktiviert
+
+
+before execute on rpi 
+export DISPLAY=:0.0

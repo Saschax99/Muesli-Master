@@ -5,7 +5,7 @@ import time
 import threading
 import sys
 from loggingsystem import writeLog
-from sensors.main_sensors import sens
+from main_sensors import sens
 
 class UiFunc:
     '''All User Interface functions'''
