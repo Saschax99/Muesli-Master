@@ -331,9 +331,19 @@ class InputLevel:
         except ValueError:
             return False
 
+    def maxLength(element):
+        '''check if element reached max size of 10'''
+        if len(element) >= 10:
+            return False
+        return True
+
     def Save(self):
         '''save all inputs into config'''
-        if not InputLevel.isFloat((self.entry_kcal.get(),self.entry_fat.get(),self.entry_sugar.get())): # if not float value return
+        listentries = (self.entry_kcal.get(),self.entry_fat.get(),self.entry_sugar.get())
+        if not InputLevel.isFloat(listentries): # if not float value return
+            return
+
+        if not InputLevel.maxLength(str(self.entry_name.get())):
             return
 
         UiFunc.writeConfigFile("c"+ str(self.c_count), "name", str(self.entry_name.get()).capitalize())
