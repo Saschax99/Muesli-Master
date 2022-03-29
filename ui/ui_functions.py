@@ -262,9 +262,16 @@ class UiFunc:
     def serve():
         if DEBUG: print("Serving...")
 
-        amount = (int(config.get(CONFIG_PORTIONS_NAME, "c1_amount"))
-                + int(config.get(CONFIG_PORTIONS_NAME, "c2_amount"))
-                + int(config.get(CONFIG_PORTIONS_NAME, "c3_amount")))
+        c1_amount = int(config.get(CONFIG_PORTIONS_NAME, "c1_amount"))
+        c2_amount = int(config.get(CONFIG_PORTIONS_NAME, "c2_amount"))
+        c3_amount = int(config.get(CONFIG_PORTIONS_NAME, "c3_amount"))
+
+        sens.motorCalculation(c1_amount, c2_amount, c3_amount)
+
+        #region csv file
+        amount = (c1_amount
+                + c2_amount
+                + c3_amount)
 
         if amount <= 0: # if 0 quit
             print("no amount set")
@@ -281,6 +288,7 @@ class UiFunc:
         t_string = now.strftime("%H:%M:%S")
         dt_string = now.strftime("%d.%m.%Y")
         writeLog(len(lines), amount, kcal, fat, sugar, t_string, dt_string)
+        #endregion /csv file
 
     #endregion result calculation
 

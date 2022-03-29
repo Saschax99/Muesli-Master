@@ -61,6 +61,9 @@ efficiency
     implemented keyboard design at input-page
     keyboards functions created
     
+29.03.2022
+    implemented function with motors
+    works fine at simulation with one motor
 
 git init
 git remote add origin https://github.com/Saschax99/Muesli-Master.git

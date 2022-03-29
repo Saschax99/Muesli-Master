@@ -8,5 +8,5 @@ if __name__ == "__main__":
     
     my_gui = InitializeMainTkWindow(root) # load gui
     logging() # create file when not exists
-    UiFunc.startReedSensorThread(main_instance=my_gui)
+    #UiFunc.startReedSensorThread(main_instance=my_gui) # reed sensor
     root.mainloop()

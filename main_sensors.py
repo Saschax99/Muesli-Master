@@ -1,21 +1,38 @@
 # https://tutorials-raspberrypi.de/entfernung-messen-mit-ultraschallsensor-hc-sr04/
 import sys
-
 if not "win" in sys.platform: import RPi.GPIO as GPIO
 import time
-
 from ui.ui_input_sensor import InputSensorLevel
-from config.config import GPIO_ULTRASONIC_TR_PIN, GPIO_ULTRASONIC_ECH_PIN, GPIO_REED_PIN_C1
+from config.config import *
+from time import sleep
 
 if not "win" in sys.platform: 
     GPIO.setmode(GPIO.BCM)
 
     GPIO.setup(GPIO_ULTRASONIC_TR_PIN, GPIO.OUT)
     GPIO.setup(GPIO_ULTRASONIC_ECH_PIN, GPIO.IN)
+
     GPIO.setup(GPIO_REED_PIN_C1, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     # GPIO.setup(GPIO_REED_PIN_C2, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     # GPIO.setup(GPIO_REED_PIN_C3, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
+    # STEP MOTORS
+    GPIO.setup(GPIO_STEPMOTOR_EN_PIN_C1, GPIO.OUT)
+    # GPIO.setup(GPIO_STEPMOTOR_EN_PIN_C2, GPIO.OUT)
+    # GPIO.setup(GPIO_STEPMOTOR_EN_PIN_C3, GPIO.OUT)
+
+    GPIO.setup(GPIO_STEPMOTOR_STEP_PIN_C1, GPIO.OUT)
+    # GPIO.setup(GPIO_STEPMOTOR_STEP_PIN_C2, GPIO.OUT)
+    # GPIO.setup(GPIO_STEPMOTOR_STEP_PIN_C3, GPIO.OUT)
+
+    steps = STEPMOTOR_STEPS_REF # number of steps one circle = 200 | 33.3 for 1 shovel
+    usDelay = 950 # number of microseconds 
+    uS = 0.000001 # one microsecond
+
+    GPIO.output(GPIO_STEPMOTOR_EN_PIN_C1, GPIO.LOW) # enable motor
+    # GPIO.output(GPIO_STEPMOTOR_EN_PIN_C2, GPIO.LOW)
+    # GPIO.output(GPIO_STEPMOTOR_EN_PIN_C3, GPIO.LOW)
+    # /STEP MOTORS
 class sens:
     '''configured sensors'''
 
@@ -82,7 +99,35 @@ class sens:
         global topsenlvl
         topsenlvl = InputSensorLevel(main_instance, c_count=container_count) #parse instance to refresh textboxes
 
+    def motorMove(steps, motor_pin):
+        for _ in range(steps):
+            GPIO.output(motor_pin, GPIO.HIGH)
+            sleep(uS * usDelay)
+            GPIO.output(motor_pin, GPIO.LOW)
+            sleep(uS * usDelay)
 
+    def motorCalculation(c1_amount, c2_amount, c3_amount):
+        '''moving motors'''
+        calc_shovel = int(200 / 6)
+        if c1_amount >= 1:
+            steps_c1 = c1_amount * calc_shovel
+            if DEBUG: print("moving stepmotor 1..")
+            sens.motorMove(steps_c1, GPIO_STEPMOTOR_STEP_PIN_C1)
+            sleep(1)
+
+        elif c2_amount >= 1:
+            steps_c2 = c2_amount * calc_shovel
+            if DEBUG: print("moving stepmotor 2..")
+            sens.motorMove(steps_c2, GPIO_STEPMOTOR_STEP_PIN_C2)
+            sleep(1)
+        
+        elif c3_amount >= 1:
+            steps_c3 = c3_amount * calc_shovel
+            if DEBUG: print("moving stepmotor 3..")
+            sens.motorMove(steps_c3, GPIO_STEPMOTOR_STEP_PIN_C3)
+            sleep(1)
+        if DEBUG: print("ended..")
+        
 
 if __name__ == '__main__':
     try:
