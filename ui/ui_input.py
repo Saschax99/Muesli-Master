@@ -1,4 +1,3 @@
-#Import all the necessary libraries 
 # keyboard https://www.bitforestinfo.com/blog/03/19/how-to-create-virtual-keyboard-using.html
 import customtkinter
 from tkinter import Label, Frame, CENTER, LEFT, Toplevel, END, LabelFrame, Button
@@ -6,12 +5,9 @@ from config.config import *
 from ui.ui_functions import UiFunc
 import sys
 
+# all keys needed
 keys =[ 
     [
-    # =========================================
-    # ===== Keyboard Configurations ===========
-    # =========================================
-
         [
             ("Character_Keys"),
             ({'side':'top','expand':'yes','fill':'both'}),
@@ -83,6 +79,8 @@ class InputLevel:
         InputLevel.loadKeyboard(self)
 
     def loadTopBar(self):
+        '''load all elements on top area'''
+        
         self.top_frame = Frame(self.top, 
                                height=40, 
                                width=800, 
@@ -116,6 +114,8 @@ class InputLevel:
 
 
     def container(self):
+        '''load all elements from containers'''
+        
         InputLevel.create_container_shadow(self.top, # SHADOW
                                         width = CONTAINER_UI_INPUT_WIDTH, 
                                         height = CONTAINER_UI_INPUT_HEIGHT, 
@@ -259,6 +259,8 @@ class InputLevel:
         self.button_save.place(x=400, y=433, anchor=CENTER)
 
     def loadBottomBar(self):
+        '''load all elements on bottom area'''
+        
         Frame(self.top, 
               height=25, 
               width=800, 
@@ -269,6 +271,8 @@ class InputLevel:
             bg=BORDER_ACCENTS_BG_COLOR).place(x=0, y=452)
 
     def button_command(self, event):
+        '''button functions when spacing or using backspace'''
+        
         try:
             entry_instance = InputLevel.inputFocus(self, self.entry_count)
             if event == "<": # delete last character if backspace
@@ -282,14 +286,15 @@ class InputLevel:
             return
 
     def create_frames_and_buttons(self):
+        '''create main frame for keyboard'''
+        
         for key_section in keys:
             store_section = Frame(self.top)
             if keys[0][0][0] ==  key_section[0][0]: # if 
                 store_section.place(x=59, y=220)
             elif keys[1][0][0] ==  key_section[0][0]:
                 store_section.place(x=581, y=220)
-            #store_section.pack(side='left',expand='yes',fill='both')
-                
+
             for layer_name, layer_properties, layer_keys in key_section:
                 store_layer = LabelFrame(store_section)#, text=layer_name)
                 store_layer.pack(layer_properties)
@@ -297,7 +302,6 @@ class InputLevel:
                     store_key_frame = Frame(store_layer)
                     store_key_frame.pack(side='top',expand='yes',fill='both')
                     for k in key_bunch:
-                        #k=k.capitalize()
                         if len(k)<=3:
                             if not "win" in sys.platform: 
                                 store_button = Button(store_key_frame, text=k, width=3, height=2)
@@ -306,9 +310,7 @@ class InputLevel:
 
                         else:
                             store_button = Button(store_key_frame, text=k.center(5,' '), height=2)
-                        # if " " in k:
-                        #     store_button['state']='disable'
-                        #flat, groove, raised, ridge, solid, or sunken
+
                         store_button['relief']="sunken"
                         store_button['bg']="#2f49cf"
                         store_button['fg']="white"
@@ -316,6 +318,8 @@ class InputLevel:
                         store_button.pack(side='left',fill='both',expand='yes')
 
     def create_container_shadow(master, width, height, color, posx, posy):
+        '''create shadow effect of container/buttons'''
+        
         customtkinter.CTkFrame(master=master,
                                width=width + 1,
                                height=height + 1,
@@ -324,6 +328,7 @@ class InputLevel:
 
     def isFloat(list):
         '''check if tuple list are float values or not'''
+        
         try:
             for element in list:
                 float(element)
@@ -333,12 +338,14 @@ class InputLevel:
 
     def maxLength(element):
         '''check if element reached max size of 10'''
+        
         if len(element) >= 10:
             return False
         return True
 
     def Save(self):
         '''save all inputs into config'''
+        
         listentries = (self.entry_kcal.get(),self.entry_fat.get(),self.entry_sugar.get())
         if not InputLevel.isFloat(listentries): # if not float value return
             return
@@ -361,6 +368,8 @@ class InputLevel:
         UiFunc.closeTopLevel(self)
 
     def loadContainerValues(self):
+        '''load container values when opening window'''
+        
         config = UiFunc.readConfigFile()
         self.entry_name.insert(END, config.get("c"+ str(self.c_count), "name"))
         self.entry_kcal.insert(END, config.get("c"+ str(self.c_count), "kcal"))
@@ -368,13 +377,19 @@ class InputLevel:
         self.entry_sugar.insert(END, config.get("c"+ str(self.c_count), "sugar"))
 
     def loadKeyboard(self):
+        '''load keyboard into self instance'''
+        
         InputLevel.create_frames_and_buttons(self)
 
     def changeInputFocus(self, entry):
+        '''get focus of textfields - knowing which textfield needs to be changed with keyboard'''
+
         self.entry_count = entry
         print(self.entry_count)
 
     def inputFocus(self, entry):
+        '''translate focus of textfield into label'''
+        
         print("input")
         if entry == 1:
             return self.entry_name
@@ -386,4 +401,3 @@ class InputLevel:
             return self.entry_sugar
         else:
             return None
-        #entryfield = entry.insert(tkinter.END, "ahd")

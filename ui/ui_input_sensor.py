@@ -1,16 +1,13 @@
-#Import all the necessary libraries
-import customtkinter # here
+# keyboard https://www.bitforestinfo.com/blog/03/19/how-to-create-virtual-keyboard-using.html
+import customtkinter
 from tkinter import Label, Frame, CENTER, LEFT, Toplevel, END, LabelFrame, Button
 from config.config import *
 import configparser
 import sys
 
+# all keys needed
 keys =[ 
     [
-    # =========================================
-    # ===== Keyboard Configurations ===========
-    # =========================================
-
         [
             ("Character_Keys"),
             ({'side':'top','expand':'yes','fill':'both'}),
@@ -126,6 +123,8 @@ class InputSensorLevel:
 
 
     def updatePortionShovels(self, instance, var1, var2, var3):
+        '''updating portion label'''
+        
         cur_size = int(var1) + int(var2) + int(var3)
         instance.container_portion_value.configure(text=str(cur_size) + "/" + str(self.config.get(CONFIG_PORTIONS_NAME, "max_portion_size")) + " Schaufeln" + " | " + str(cur_size * GRAMM_PER_PORTION) + " Gramm")
 
@@ -191,6 +190,8 @@ class InputSensorLevel:
         InputSensorLevel.updateResult(self, instance, kcal_result, fat_result, sugar_result)
 
     def loadTopBar(self):
+        '''load all elements on top area'''
+        
         self.top_frame = Frame(self.top, 
                                height=40, 
                                width=800, 
@@ -211,6 +212,8 @@ class InputSensorLevel:
         self.top_name.place(x=30, y=5)
 
     def container(self):
+        '''load all elements from containers'''
+        
         InputSensorLevel.create_container_shadow(self.top, # SHADOW
                                         width = CONTAINER_UI_INPUT_WIDTH, 
                                         height = CONTAINER_UI_INPUT_HEIGHT, 
@@ -354,6 +357,8 @@ class InputSensorLevel:
         self.button_save.place(x=400, y=433, anchor=CENTER)
 
     def loadBottomBar(self):
+        '''load all elements on bottom area'''
+        
         Frame(self.top, 
               height=25, 
               width=800, 
@@ -365,6 +370,8 @@ class InputSensorLevel:
 
 
     def button_command(self, event):
+        '''button functions when spacing or using backspace'''
+        
         try:
             entry_instance = InputSensorLevel.inputFocus(self, self.entry_count)
             if event == "<": # delete last character if backspace
@@ -378,13 +385,14 @@ class InputSensorLevel:
             return
 
     def create_frames_and_buttons(self):
+        '''create main frame for keyboard'''
+        
         for key_section in keys:
             store_section = Frame(self.top)
             if keys[0][0][0] ==  key_section[0][0]: # if 
                 store_section.place(x=59, y=220)
             elif keys[1][0][0] ==  key_section[0][0]:
                 store_section.place(x=581, y=220)
-            #store_section.pack(side='left',expand='yes',fill='both')
                 
             for layer_name, layer_properties, layer_keys in key_section:
                 store_layer = LabelFrame(store_section)#, text=layer_name)
@@ -393,7 +401,6 @@ class InputSensorLevel:
                     store_key_frame = Frame(store_layer)
                     store_key_frame.pack(side='top',expand='yes',fill='both')
                     for k in key_bunch:
-                        #k=k.capitalize()
                         if len(k)<=3:
                             if not "win" in sys.platform: 
                                 store_button = Button(store_key_frame, text=k, width=3, height=2)
@@ -402,9 +409,7 @@ class InputSensorLevel:
 
                         else:
                             store_button = Button(store_key_frame, text=k.center(5,' '), height=2)
-                        # if " " in k:
-                        #     store_button['state']='disable'
-                        #flat, groove, raised, ridge, solid, or sunken
+
                         store_button['relief']="sunken"
                         store_button['bg']="#2f49cf"
                         store_button['fg']="white"
@@ -412,6 +417,8 @@ class InputSensorLevel:
                         store_button.pack(side='left',fill='both',expand='yes')
 
     def create_container_shadow(master, width, height, color, posx, posy):
+        '''create shadow effect of container/buttons'''
+        
         customtkinter.CTkFrame(master=master,
                                width=width + 1,
                                height=height + 1,
@@ -427,6 +434,7 @@ class InputSensorLevel:
             self.config.write(configfile)
 
     def closeTopLevel(self, instance):
+        '''closing toplevel as instance'''
     
         InputSensorLevel.updateContainerValues(self, instance)
         InputSensorLevel.updateResultSize(self, instance)
@@ -435,6 +443,7 @@ class InputSensorLevel:
 
     def isFloat(list):
         '''check if tuple list are float values or not'''
+        
         try:
             for element in list:
                 float(element)
@@ -443,13 +452,19 @@ class InputSensorLevel:
             return False
 
     def loadKeyboard(self):
+        '''load keyboard into self instance'''
+        
         InputSensorLevel.create_frames_and_buttons(self)
 
     def changeInputFocus(self, entry):
+        '''get focus of textfields - knowing which textfield needs to be changed with keyboard'''
+        
         self.entry_count = entry
         print(self.entry_count)
 
     def inputFocus(self, entry):
+        '''translate focus of textfield into label'''
+        
         print("input")
         if entry == 1:
             return self.entry_name
@@ -464,6 +479,7 @@ class InputSensorLevel:
 
     def Save(self):
         '''save all inputs into config'''
+        
         if not InputSensorLevel.isFloat((self.entry_kcal.get(),self.entry_fat.get(),self.entry_sugar.get())): # if not float value return
             return
         InputSensorLevel.writeConfigFile(self, "c"+ str(self.c_count), "name", str(self.entry_name.get()).capitalize())
@@ -475,6 +491,8 @@ class InputSensorLevel:
 
 
     def loadContainerValues(self):
+        '''load container values when opening window'''
+        
         config = InputSensorLevel.readConfigFile()
         self.entry_name.insert(END, config.get("c"+ str(self.c_count), "name"))
         self.entry_kcal.insert(END, config.get("c"+ str(self.c_count), "kcal"))

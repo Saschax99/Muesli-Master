@@ -1,5 +1,5 @@
+# loading image logo at top left
 from tkinter import Tk, Canvas, NW, PhotoImage
-
 
 win = Tk()
 
@@ -12,6 +12,3 @@ canvas.pack()
 canvas.create_image(0, 0, image=photoimage, anchor=NW)
 
 win.mainloop()
-
-# atm cant resize and show into main script
-# http://raspberry.tips/raspberrypi-einsteiger/raspberry-pi-autostart-von-skripten-und-programmen-einrichten

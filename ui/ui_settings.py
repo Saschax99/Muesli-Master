@@ -21,16 +21,11 @@ class TLevel:
             self.top.attributes("-fullscreen", True)
         else:
             self.top.attributes("-fullscreen", False)
-        #master.attributes('-alpha',0.85) # transparent
+
         self.bg = Label(self.top, bg = WINDOW_BG_COLOR, width = WINDOW_WIDTH, height = WINDOW_HEIGHT) # background color
         self.bg.place(x=0, y =0)
 
         self.top.resizable(False, False)
-        # self.top.lift()
-        # self.top.focus_force()
-        # self.top.grab_set() # maybe add later
-
-
         #endregion
 
         TLevel.loadTopBar(self)
@@ -42,6 +37,8 @@ class TLevel:
         TLevel.updateContainerNames(self)
 
     def loadTopBar(self):
+        '''load all elements on top area'''
+        
         self.top_frame = Frame(self.top, 
                                height=40, 
                                width=800, 
@@ -74,6 +71,8 @@ class TLevel:
         self.button_back.place(x=722, y=20, anchor=CENTER)
 
     def container(self):        
+        '''load all elements from containers'''
+        
         TLevel.create_container_shadow(self.top, 
                                         width = CONTAINER_UI_SETTINGS_WIDTH, 
                                         height = CONTAINER_UI_SETTINGS_HEIGHT, 
@@ -190,6 +189,8 @@ class TLevel:
         #endregion /edit max. size portion
 
     def loadBottomBar(self):
+        '''load all elements on bottom area'''
+        
         Frame(self.top, 
               height=25, 
               width=800, 
@@ -201,6 +202,8 @@ class TLevel:
 
 
     def create_container_shadow(master, width, height, color, posx, posy):
+        '''create shadow effect of container/buttons'''
+        
         customtkinter.CTkFrame(master=master,
                                width=width + 1,
                                height=height + 1,
@@ -209,10 +212,14 @@ class TLevel:
 
 
     def openEditor(self, container_count):
+        '''open editor -> ui_input'''
+        
         config = UiFunc.readConfigFile()
         InputLevel(c_name=config.get("c"+str(container_count), "name"), c_count=container_count, instance=self) #parse instance to refresh textboxes
 
     def updateContainerNames(self):
+        '''updating container names'''
+        
         config = UiFunc.readConfigFile()
         self.container_1_settings.configure(text=config.get("c1", "name"))
         self.container_2_settings.configure(text=config.get("c2", "name"))

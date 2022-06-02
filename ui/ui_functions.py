@@ -10,11 +10,6 @@ from main_sensors import sens
 class UiFunc:
     '''All User Interface functions'''
     
-        # RESET STATEMENTS
-        # UiFunc.resetResultValues(self) # reset values when switching
-        # UiFunc.updateResultSize(self) # update result sizes
-        # UiFunc.calculateResultValues(self) # update result labels and calc
-
     #region portions size
     def updateResultSize(self):
         '''update result size of portion'''
@@ -31,23 +26,26 @@ class UiFunc:
         UiFunc.updatePortionShovels(self, var_amount_1, var_amount_2, var_amount_3)
 
     def updatePortionShovels(self, var1, var2, var3):
+        '''updating portions label'''
         cur_size = int(var1) + int(var2) + int(var3)
         self.container_portion_value.configure(text=str(cur_size) + "/" + str(config.get(CONFIG_PORTIONS_NAME, "max_portion_size")) + " Schaufeln" + " | " + str(cur_size * GRAMM_PER_PORTION) + " Gramm")
 
-
     def resetResultValues(self, count = 0):
+        '''reset result values of containers - after resizing amount'''
+        
         if count == 0: # reset all
             UiFunc.writeConfigFile(CONFIG_PORTIONS_NAME, "c1_amount", "0")
             UiFunc.writeConfigFile(CONFIG_PORTIONS_NAME, "c2_amount", "0")
             UiFunc.writeConfigFile(CONFIG_PORTIONS_NAME, "c3_amount", "0")
-
+            
         elif count == 1:
-            UiFunc.writeConfigFile(CONFIG_PORTIONS_NAME, "c1_amount", "0")        
+            UiFunc.writeConfigFile(CONFIG_PORTIONS_NAME, "c1_amount", "0")   
+                 
         elif count == 2:
-            UiFunc.writeConfigFile(CONFIG_PORTIONS_NAME, "c2_amount", "0")        
+            UiFunc.writeConfigFile(CONFIG_PORTIONS_NAME, "c2_amount", "0")    
+                
         elif count == 3:
             UiFunc.writeConfigFile(CONFIG_PORTIONS_NAME, "c3_amount", "0")
-
 
     def increasePortionAmount(self, con):
         '''increase amount of containers portion size'''
@@ -102,6 +100,8 @@ class UiFunc:
         UiFunc.calculateResultValues(self)
 
     def disableButton(self, count):
+        '''disabling button'''
+        
         if count == 1:
             self.button_container_1_inc.configure(state= "disabled", fg_color=BUTTON_DISABLED_BG_COLOR)
             self.button_container_1_dec.configure(state= "disabled", fg_color=BUTTON_DISABLED_BG_COLOR)
@@ -115,6 +115,8 @@ class UiFunc:
             self.button_container_3_dec.configure(state= "disabled", fg_color=BUTTON_DISABLED_BG_COLOR)
 
     def enableButton(self, count):
+        '''enabling button'''
+        
         if count == 1:
             self.button_container_1_inc.configure(state= "normal", fg_color=BUTTON_BG_COLOR)
             self.button_container_1_dec.configure(state= "normal", fg_color=BUTTON_BG_COLOR)
@@ -260,6 +262,8 @@ class UiFunc:
         self.label_portion_nutritional_values_sugar.configure(text=str(sugar) + " Zucker")
 
     def serve():
+        '''serving portion with motors and logging into csv'''
+        
         if DEBUG: print("Serving...")
 
         c1_amount = int(config.get(CONFIG_PORTIONS_NAME, "c1_amount"))
@@ -294,7 +298,8 @@ class UiFunc:
 
 
     def closeTopLevel(self, instance = None):
-        #UiFunc.CheckboxStartup(self)
+        '''close toplevel after beeing in settings - modular as instance'''
+
         if not instance == None: # if instance | from ui settings to main transition
             UiFunc.updateContainerValues(instance)
             UiFunc.updateResultSize(instance)
@@ -315,6 +320,7 @@ class UiFunc:
         
     def startDistanceSensorThread(main_instance):
         '''starting new thread for reed sensor'''
+        
         print("idas")
         thread2 = threading.Thread(target=sens.fetchDistanceSensorValues, args=(main_instance, ))
         thread2.setDaemon(True)

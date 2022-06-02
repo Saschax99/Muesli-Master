@@ -1,12 +1,11 @@
-#Import all the necessary libraries
-# https://www.raspberrypi-spy.co.uk/2017/11/how-to-rotate-the-raspberry-pi-display-output/#prettyPhoto
 import customtkinter
 from tkinter import Label, Frame, CENTER, LEFT, RIGHT
 from PIL import Image, ImageTk
 from config.config import *
 from ui.ui_functions import UiFunc
-from functions import openTopLevel
+
 import sys
+from ui.ui_settings import TLevel
 
 class InitializeMainTkWindow:
     def __init__(self, master):
@@ -45,6 +44,8 @@ class InitializeMainTkWindow:
         #endregion /LOADING IN
 
     def loadTopBar(self, master):
+        '''load all elements on top area'''
+        
         self.top_frame = Frame(master, 
                                height=40, 
                                width=800, 
@@ -55,15 +56,6 @@ class InitializeMainTkWindow:
               height=3,
               width=800,
               bg=BORDER_ACCENTS_BG_COLOR).place(x=0, y=40)
-
-        # title name
-        # self.top_name = Label(self.top_frame, 
-        #                       text="Müsli-Master",
-        #                       bg=BACKGROUND_COLOR_BORDERS, 
-        #                       fg="white",
-        #                       width=12, 
-        #                       font=(TEXT_FONT, TITLE_FONTSIZE)) 
-        # self.top_name.place(x=30, y=5)
 
         image = Image.open(PICTURE_PATH)
         zoom = .19
@@ -82,23 +74,18 @@ class InitializeMainTkWindow:
                                            bg_color=TOP_BORDER_BG_COLOR,
                                            fg_color=TOP_BORDER_BG_COLOR,
                                            hover_color=BUTTON_HOVER_BG_COLOR,
-                                           command=lambda: openTopLevel(self))
+                                           command=lambda: InitializeMainTkWindow.openTopLevel(self))
         self.button_port_settings.place(x=722, y=20, anchor=CENTER)
 
     def loadContainerLeft(self, master):
+        '''loading container on left side - 1 con.'''
+        
         InitializeMainTkWindow.create_container_shadow(master, 
                                                         width = CONTAINER_WIDTH, 
                                                         height = CONTAINER_HEIGHT, 
                                                         color = CONTAINER_SHADOW_COLOR,
                                                         posx = CONTAINER_1_X, 
                                                         posy = CONTAINER_1_Y)
-
-        # val = UiFunc.readConfigFile()
-        # if int(val.get("portionsettings", "main_supply_container")) != 1:
-        #     self.activated_container_border_1.place_forget()
-        # else:
-        #     self.activated_container_border_1.place(x=CONTAINER_1_X - 6, y=CONTAINER_1_Y - 6) 
-
 
         self.container_1 = customtkinter.CTkFrame(master=master,
                                                   width=CONTAINER_WIDTH,
@@ -324,6 +311,7 @@ class InitializeMainTkWindow:
         self.button_container_2_inc.place(x=185, y=0)
 
     def loadContainerRight(self, master):
+        '''loading container of right side - con. 3'''
 
         InitializeMainTkWindow.create_container_shadow(master, 
                                                         width = CONTAINER_WIDTH, 
@@ -439,6 +427,8 @@ class InitializeMainTkWindow:
         self.button_container_3_inc.place(x=185, y=0)
 
     def loadPortionSize(self, master):
+        '''loading portionsize - bottom left'''
+        
         InitializeMainTkWindow.create_container_shadow(master, 
                                                        width = LARGE_CONTAINER_WIDTH, 
                                                        height = LARGE_CONTAINER_HEIGHT, 
@@ -475,6 +465,8 @@ class InitializeMainTkWindow:
         self.container_portion_value.place(x=6, y=49) 
 
     def loadNutritionalValues(self, master):
+        '''loading nutritional values - bottom right'''
+        
         InitializeMainTkWindow.create_container_shadow(master, 
                                                        width = LARGE_CONTAINER_WIDTH, 
                                                        height = LARGE_CONTAINER_HEIGHT, 
@@ -545,6 +537,8 @@ class InitializeMainTkWindow:
         self.label_portion_nutritional_values_sugar.place(x=242, y=50)
 
     def loadBottomBar(self, master):
+        '''loading bottom bar - start button / time etc.'''
+        
         self.button_start = customtkinter.CTkButton(master=master, 
                                            text="Servieren", 
                                            width=200, 
@@ -592,6 +586,8 @@ class InitializeMainTkWindow:
         self.bot_footer.place(x=594,y=2)
 
     def create_container_shadow(master, width, height, color, posx, posy):
+        '''create shadow effect'''
+        
         customtkinter.CTkFrame(master=master,
                                width=width + 1,
                                height=height + 1,
@@ -599,12 +595,21 @@ class InitializeMainTkWindow:
                                fg_color = color).place(x=posx - 2, y=posy - 2)     
 
     def openServeDialog(self):
+        '''open simple dialog window for serving portion'''
+        
         customtkinter.CTkDialog(text="Wollen Sie die Portion Servieren?")
         if DEBUG: print("opening serve dialog")
 
 
 
     def Update(self):
+        '''update values from calculation'''
+        
         UiFunc.updateContainerValues(self)
         UiFunc.updateResultSize(self)
         UiFunc.calculateResultValues(self)
+
+    def openTopLevel(self):
+        '''execute toplevel and open'''
+        
+        TLevel(instance=self)
