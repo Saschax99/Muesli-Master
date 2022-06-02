@@ -80,3 +80,11 @@ Checkboxen entfernen -> Wenn behälter Leer dann Buttons deaktiviert
 
 before execute on rpi 
 export DISPLAY=:0.0
+
+
+
+configfiles code
+156 lines
+
+mainfiles code
+2225 lines

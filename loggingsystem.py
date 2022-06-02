@@ -21,3 +21,5 @@ def logging():
     if not os.path.isfile(LOGSYSTEM_PATH):
         if DEBUG: print("creating new csv file..")
         writeLog("Nr.", "Portionsmenge", "Kcal", "Fett", "Zucker", "Zeit", "Datum")
+    else:
+        print("logfile already exists")

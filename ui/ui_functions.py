@@ -312,6 +312,13 @@ class UiFunc:
         thread = threading.Thread(target=sens.fetchReedSensorValues, args=(main_instance, ))
         thread.setDaemon(True)
         thread.start()
+        
+    def startDistanceSensorThread(main_instance):
+        '''starting new thread for reed sensor'''
+        print("idas")
+        thread2 = threading.Thread(target=sens.fetchDistanceSensorValues, args=(main_instance, ))
+        thread2.setDaemon(True)
+        thread2.start()
     #endregion /SENSORS
 
 

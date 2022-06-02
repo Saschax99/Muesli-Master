@@ -14,3 +14,4 @@ canvas.create_image(0, 0, image=photoimage, anchor=NW)
 win.mainloop()
 
 # atm cant resize and show into main script
+# http://raspberry.tips/raspberrypi-einsteiger/raspberry-pi-autostart-von-skripten-und-programmen-einrichten
